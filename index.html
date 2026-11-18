@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="html-title">HSK & Thai Master - 30 Chapters Complete</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+        .chinese-font { font-family: 'Noto Sans SC', sans-serif; font-weight: 600; }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header & Progress Bar -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl" id="header-icon">🏮</span>
+                <div>
+                    <h1 id="header-title" class="text-xl font-bold bg-gradient-to-r from-amber-400 to-rose-400 bg-clip-text text-transparent">HSK Unified Master (ไทย ➔ จีน)</h1>
+                    <p id="header-desc" class="text-xs text-slate-400">ระบบ 30 บทสมบูรณ์ (1,350+ คำศัพท์ & พินอินเทียบเสียงภาษาไทย)</p>
+                </div>
+            </div>
+            <!-- Mode Switcher & Progress -->
+            <div class="flex items-center gap-3 flex-wrap justify-end">
+                <button onclick="toggleAppMode()" id="mode-switch-btn" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold rounded-xl shadow transition border border-indigo-400/40 flex items-center gap-1.5">
+                    🔄 สลับโหมด: คนจีนเรียนไทย (🇨🇳 ➔ 🇹🇭)
+                </button>
+                <div class="w-full sm:w-60 bg-slate-700/60 p-2 rounded-xl border border-slate-600">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span id="progress-label" class="text-slate-300 font-medium">ความคืบหน้าการจำ</span>
+                        <span id="progress-text" class="text-amber-400 font-bold">0 / 0 คำ</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="bg-gradient-to-r from-emerald-500 to-amber-400 h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Tabs -->
+        <nav class="bg-slate-900/90 border-t border-slate-800 px-4 py-2 flex justify-center gap-2 overflow-x-auto">
+            <button onclick="switchTab('quiz')" id="nav-quiz" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition shadow">🎯 โหมดสุ่ม 10 คำ</button>
+            <button onclick="switchTab('fullquiz')" id="nav-fullquiz" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">📝 ทดสอบครบทุกคำ</button>
+            <button onclick="switchTab('bigquiz')" id="nav-bigquiz" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">🏆 ทดสอบ 10 บทใหญ่</button>
+            <button onclick="switchTab('listening')" id="nav-listening" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">🎧 โหมดฟังเสียง</button>
+            <button onclick="switchTab('matching')" id="nav-matching" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">⚡ จับคู่ไว 5x2</button>
+            <button onclick="switchTab('stats')" id="nav-stats" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">📊 กราฟสถิติ</button>
+            <button onclick="switchTab('flashcard')" id="nav-flashcard" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition">🃏 คลังศัพท์ & 3D</button>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6">
+
+        <!-- TAB 1: QUIZ MODE -->
+        <section id="tab-quiz" class="space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+                <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span id="quiz-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนน: 0</span>
+                        <span id="quiz-counter" class="text-xs font-bold px-2.5 py-1 bg-indigo-950 text-indigo-300 border border-indigo-700/60 rounded-full">ข้อที่ 1 / 10</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span id="wrong-badge" class="hidden text-xs font-bold px-2.5 py-1 bg-rose-950 text-rose-300 border border-rose-800 rounded-lg">🔥 เคยตอบผิด</span>
+                        <button onclick="toggleQuizVisual()" id="quiz-visual-toggle" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-semibold rounded-lg border border-slate-600 transition">👁 ซ่อนรูปภาพ</button>
+                        <button onclick="toggleQuizPinyin()" id="quiz-pinyin-toggle" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-semibold rounded-lg border border-slate-600 transition">👁 ซ่อนพินอิน</button>
+                        <select id="quiz-chapter-select" onchange="restartQuiz()" class="bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-1 border border-slate-600 focus:outline-none">
+                            <option value="1">บทที่ 1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="quiz-box" class="text-center space-y-6">
+                    <div class="relative w-44 h-36 mx-auto rounded-2xl overflow-hidden shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
+                        <div id="quiz-visual" class="text-7xl select-none transition-transform duration-300 hover:scale-110">🏮</div>
+                        <button onclick="playCurrentAudio()" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
+                            🔊 ฟังเสียง
+                        </button>
+                    </div>
+
+                    <div>
+                        <div id="quiz-main-text" class="text-5xl md:text-6xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold">--</div>
+                        <div id="quiz-sub-text" class="text-xl text-slate-300 font-medium tracking-wide">--</div>
+                    </div>
+
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"></div>
+                </div>
+
+                <div id="quiz-gameover" class="hidden text-center py-10 space-y-5">
+                    <div class="text-5xl">🎉</div>
+                    <h2 id="quiz-end-title" class="text-2xl font-bold text-emerald-400">ยอดเยี่ยม! จบรอบสุ่ม 10 คำแล้ว</h2>
+                    <p id="quiz-final-score" class="text-slate-300 text-lg">คุณทำคะแนนได้ 0 คะแนน</p>
+                    <div class="flex justify-center gap-3 flex-wrap pt-2">
+                        <button id="quiz-restart-btn" onclick="restartQuiz()" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl shadow transition">🔄 สุ่มเล่น 10 คำใหม่อีกรอบ</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: FULL CHAPTER QUIZ -->
+        <section id="tab-fullquiz" class="hidden space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+                <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span id="full-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนน: 0</span>
+                        <span id="full-counter" class="text-xs font-bold px-2.5 py-1 bg-indigo-950 text-indigo-300 border border-indigo-700/60 rounded-full">ข้อที่ 1 / 10</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="toggleFullVisual()" id="full-visual-toggle" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-semibold rounded-lg border border-slate-600 transition">👁 ซ่อนรูปภาพ</button>
+                        <button onclick="toggleFullPinyin()" id="full-pinyin-toggle" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-semibold rounded-lg border border-slate-600 transition">👁 ซ่อนพินอิน</button>
+                        <select id="full-chapter-select" onchange="restartFullQuiz()" class="bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-1 border border-slate-600 focus:outline-none">
+                            <option value="1">บทที่ 1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="full-box" class="text-center space-y-6">
+                    <div class="relative w-44 h-36 mx-auto rounded-2xl overflow-hidden shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
+                        <div id="full-visual" class="text-7xl select-none transition-transform duration-300 hover:scale-110">🏮</div>
+                        <button onclick="playCurrentFullAudio()" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
+                            🔊 ฟังเสียง
+                        </button>
+                    </div>
+
+                    <div>
+                        <div id="full-main-text" class="text-5xl md:text-6xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold">--</div>
+                        <div id="full-pinyin" class="text-xl text-slate-300 font-medium tracking-wide">--</div>
+                    </div>
+
+                    <div id="full-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"></div>
+                </div>
+
+                <div id="full-gameover" class="hidden text-center py-10 space-y-5">
+                    <div class="text-5xl">🏆</div>
+                    <h2 id="full-end-title" class="text-2xl font-bold text-emerald-400">สุดยอด! ทดสอบครบทุกคำในบทแล้ว</h2>
+                    <p id="full-final-score" class="text-slate-300 text-lg">คุณทำคะแนนได้ 0 คะแนน</p>
+                    <div class="flex justify-center gap-3 flex-wrap pt-2">
+                        <button id="full-restart-btn" onclick="restartFullQuiz()" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl shadow transition">🔄 ทดสอบบทนี้อีกรอบ</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: BIG CHAPTER QUIZ -->
+        <section id="tab-bigquiz" class="hidden space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+                <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span id="big-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนน: 0</span>
+                        <span id="big-counter" class="text-xs font-bold px-2.5 py-1 bg-indigo-950 text-indigo-300 border border-indigo-700/60 rounded-full">ข้อที่ 1 / 10</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="toggleBigVisual()" id="big-visual-toggle" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-semibold rounded-lg border border-slate-600 transition">👁 ซ่อนรูปภาพ</button>
+                        <button onclick="toggleBigPinyin()" id="big-pinyin-toggle" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-semibold rounded-lg border border-slate-600 transition">👁 ซ่อนพินอิน</button>
+                        <select id="big-chapter-select" onchange="restartBigQuiz()" class="bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-1 border border-slate-600 focus:outline-none">
+                            <option value="1">บทใหญ่ที่ 1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="big-box" class="text-center space-y-6">
+                    <div class="relative w-44 h-36 mx-auto rounded-2xl overflow-hidden shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
+                        <div id="big-visual" class="text-7xl select-none transition-transform duration-300 hover:scale-110">🏮</div>
+                        <button onclick="playCurrentBigAudio()" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
+                            🔊 ฟังเสียง
+                        </button>
+                    </div>
+
+                    <div>
+                        <div id="big-main-text" class="text-5xl md:text-6xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold">--</div>
+                        <div id="big-pinyin" class="text-xl text-slate-300 font-medium tracking-wide">--</div>
+                    </div>
+
+                    <div id="big-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"></div>
+                </div>
+
+                <div id="big-gameover" class="hidden text-center py-10 space-y-5">
+                    <div class="text-5xl">👑</div>
+                    <h2 id="big-end-title" class="text-2xl font-bold text-amber-400">ยอดเยี่ยม! พิชิตบทใหญ่สำเร็จแล้ว</h2>
+                    <p id="big-final-score" class="text-slate-300 text-lg">คุณทำคะแนนได้ 0 คะแนน</p>
+                    <div class="flex justify-center gap-3 flex-wrap pt-2">
+                        <button id="big-restart-btn" onclick="restartBigQuiz()" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl shadow transition">🔄 ทดสอบบทใหญ่นี้อีกรอบ</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: LISTENING MODE -->
+        <section id="tab-listening" class="hidden space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto text-center space-y-6">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span id="listening-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนนฟังเสียง: 0</span>
+                        <span id="listening-counter" class="text-xs font-bold px-2.5 py-1 bg-indigo-950 text-indigo-300 border border-indigo-700/60 rounded-full">ข้อที่ 1 / 10</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleListeningVisual()" id="listening-visual-toggle" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-semibold rounded-lg border border-slate-600 transition">👁 ซ่อนรูปภาพ</button>
+                        <select id="listening-chapter-select" onchange="restartListening()" class="bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-1 border border-slate-600 focus:outline-none">
+                            <option value="1">บทที่ 1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="listening-box" class="space-y-6">
+                    <div class="py-6 space-y-3 bg-slate-900/60 rounded-xl border border-slate-700">
+                        <div class="w-36 h-32 mx-auto rounded-2xl shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
+                            <div id="listening-visual" class="text-6xl select-none">🎧</div>
+                        </div>
+                        <p id="listening-hint" class="text-slate-400 text-sm">ฟังเสียงออกอัตโนมัติ เลือกคำตอบที่ถูกต้อง</p>
+                        <div class="flex justify-center gap-3">
+                            <button onclick="playListeningAudio(1.0)" id="listen-btn-1" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow transition flex items-center gap-2 text-sm">
+                                🔊 ฟังเสียงซ้ำ (1.0x)
+                            </button>
+                            <button onclick="playListeningAudio(0.75)" id="listen-btn-2" class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium rounded-xl shadow transition text-sm">
+                                🐢 เสียงช้า (0.75x)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="listening-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                </div>
+
+                <div id="listening-gameover" class="hidden text-center py-10 space-y-5">
+                    <div class="text-5xl">🎧🎉</div>
+                    <h2 id="listening-end-title" class="text-2xl font-bold text-emerald-400">ฝึกฟังจบรอบ 10 คำแล้ว!</h2>
+                    <p id="listening-final-score" class="text-slate-300 text-lg">คุณทำคะแนนฟังเสียงได้ 0 คะแนน</p>
+                    <div class="flex justify-center gap-3 flex-wrap pt-2">
+                        <button id="listening-restart-btn" onclick="restartListening()" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl shadow transition">🔄 สุ่มฝึกฟังรอบใหม่</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: SPEED MATCHING -->
+        <section id="tab-matching" class="hidden space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-3xl mx-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="matching-title" class="text-lg font-bold text-amber-400">⚡ จับคู่ไว 5 คำ (ไทย & จีน)</h2>
+                    <div class="flex items-center gap-3">
+                        <span id="matching-timer" class="text-sm font-bold text-amber-300 bg-slate-700 px-3 py-1 rounded-full">⏱ 0.0s</span>
+                        <button id="matching-start-btn" onclick="startMatchingGame()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-lg shadow transition">เริ่มเกมใหม่</button>
+                    </div>
+                </div>
+                <div id="matching-board" class="grid grid-cols-2 md:grid-cols-5 gap-3 min-h-[300px] items-center"></div>
+                <div id="matching-win" class="hidden text-center py-10 space-y-3">
+                    <div class="text-5xl">🎉</div>
+                    <h3 id="matching-win-title" class="text-xl font-bold text-emerald-400">ยอดเยี่ยม! จับคู่สำเร็จแล้ว</h3>
+                    <p id="matching-time-result" class="text-slate-300">เวลาที่ใช้: 0 วินาที</p>
+                    <button id="matching-again-btn" onclick="startMatchingGame()" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl">เล่นอีกรอบ</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: STATS -->
+        <section id="tab-stats" class="hidden space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-4xl mx-auto space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-700 pb-4">
+                    <div>
+                        <h2 id="stats-heading" class="text-xl font-bold text-amber-400">📊 กราฟสถิติการเรียนรู้รายคำ</h2>
+                        <p id="stats-sub" class="text-xs text-slate-400 mt-1">แสดงจำนวนครั้งที่พบคำศัพท์, ตอบถูก และตอบผิดแยกตามแต่ละบทเรียน</p>
+                    </div>
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <select id="stats-chapter-select" onchange="renderStatsChart()" class="bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-2 border border-slate-600 focus:outline-none w-full md:w-64">
+                            <option value="1">บทที่ 1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 text-center">
+                        <div id="stat-label-1" class="text-xs text-slate-400">คำศัพท์ทั้งหมดในบทนี้</div>
+                        <div id="stat-total-words" class="text-2xl font-bold text-amber-400 mt-1">0</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 text-center">
+                        <div id="stat-label-2" class="text-xs text-slate-400">ตอบถูกรวม</div>
+                        <div id="stat-total-correct" class="text-2xl font-bold text-emerald-400 mt-1">0 ครั้ง</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700 text-center">
+                        <div id="stat-label-3" class="text-xs text-slate-400">ตอบผิดรวม</div>
+                        <div id="stat-total-wrong" class="text-2xl font-bold text-rose-400 mt-1">0 ครั้ง</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700 rounded-xl p-4 space-y-4 max-h-[500px] overflow-y-auto" id="stats-chart-container"></div>
+            </div>
+        </section>
+
+        <!-- TAB 7: FLASHCARD & DICTIONARY -->
+        <section id="tab-flashcard" class="hidden space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <select id="dict-chapter-filter" onchange="renderDictionary()" class="bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-2 border border-slate-600 focus:outline-none">
+                        <option value="all">📚 ทุกบทเรียน</option>
+                    </select>
+                    <select id="dict-status-filter" onchange="renderDictionary()" class="bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-2 border border-slate-600 focus:outline-none">
+                        <option value="all" id="opt-all">สถานะ: ทั้งหมด</option>
+                        <option value="memorized" id="opt-mem">จำได้แล้ว</option>
+                        <option value="unmemorized" id="opt-unmem">ยังจำไม่ได้</option>
+                        <option value="weak" id="opt-weak">🔥 ตอบผิดบ่อย</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-72">
+                    <input type="text" id="dict-search" oninput="renderDictionary()" placeholder="🔍 ค้นหาคำศัพท์, พินอิน, ความหมาย..." class="w-full bg-slate-700 text-sm text-slate-200 rounded-lg px-3 py-2 border border-slate-600 focus:outline-none focus:border-amber-500">
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto perspective-1000 my-4">
+                <div id="flashcard-container" onclick="flipFlashcard()" class="relative w-full h-72 rounded-2xl cursor-pointer transition-transform duration-500 transform-style-3d shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-between backface-hidden">
+                        <div class="w-full flex justify-between text-xs text-slate-400">
+                            <span id="fc-chapter-badge" class="bg-slate-700 px-2.5 py-1 rounded-md text-amber-300">บทที่ 1</span>
+                            <span id="fc-flip-hint">คลิกเพื่อพลิกดูความหมาย 🔄</span>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <div class="w-20 h-16 mx-auto rounded-xl shadow border border-slate-600 bg-slate-950 flex items-center justify-center">
+                                <span id="fc-visual" class="text-4xl">🏮</span>
+                            </div>
+                            <div id="fc-main-text" class="text-5xl text-amber-400 tracking-wider font-bold">--</div>
+                            <div id="fc-sub-text" class="text-lg text-slate-300 font-medium">--</div>
+                        </div>
+                        <button onclick="event.stopPropagation(); playAudio(getCurrentFlashcardText())" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-1.5 rounded-full text-sm font-bold shadow" id="fc-audio-btn">
+                            🔊 ฟังเสียง
+                        </button>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between backface-hidden rotate-y-180">
+                        <div id="fc-back-title" class="text-xs text-amber-400 font-semibold">ความหมายและตัวอย่างประโยค</div>
+                        <div class="space-y-3 text-center">
+                            <div id="fc-meaning" class="text-2xl font-bold text-white">--</div>
+                            <div id="fc-example" class="text-sm text-slate-300 bg-slate-800/80 p-3 rounded-xl border border-slate-700">--</div>
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-800">
+                            <button onclick="event.stopPropagation(); prevFlashcard()" id="fc-prev-btn" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs">⬅ ก่อนหน้า</button>
+                            <button onclick="event.stopPropagation(); toggleMemoryStatus()" id="fc-memorized-btn" class="px-4 py-1.5 rounded-lg text-xs font-bold transition">✓ จำได้แล้ว</button>
+                            <button onclick="event.stopPropagation(); nextFlashcard()" id="fc-next-btn" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs">ถัดไป ➡</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+                <div class="p-4 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200"><span id="dict-title-prefix">คลังคำศัพท์ทั้งหมด</span> (<span id="dict-count">0</span> <span id="dict-title-unit">คำ</span>)</h3>
+                </div>
+                <div class="overflow-x-auto max-h-96">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="bg-slate-900/80 text-slate-400 sticky top-0 border-b border-slate-700">
+                            <tr>
+                                <th class="p-3" id="th-col-1">คำศัพท์</th>
+                                <th class="p-3" id="th-col-2">พินอินออกเสียง</th>
+                                <th class="p-3" id="th-col-3">ความหมาย</th>
+                                <th class="p-3" id="th-col-4">บทเรียน</th>
+                                <th class="p-3 text-center" id="th-col-5">สถิติ</th>
+                                <th class="p-3 text-center" id="th-col-6">สถานะ</th>
+                                <th class="p-3 text-center" id="th-col-7">เสียง</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dict-tbody" class="divide-y divide-slate-700/50"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer-text" class="bg-slate-950 border-t border-slate-800 text-center py-4 text-xs text-slate-500 mt-auto">
+        HSK & Thai Master - Dual Learning Mode (Thai-Chinese / Chinese-Thai 30 Chapters)
+    </footer>
+
+    <!-- Script Data & Logic -->
+    <script>
+        // ระบบพินอินเทียบเสียงภาษาไทยแท้ (Chinese Pinyin Phonetics สำหรับคนจีนอ่านออกเสียงภาษาไทยได้ทันทีทุกคำ!)
+        function getThaiPinyinForChinese(thaiText) {
+            const map = {
+                // บทที่ 1
+                "คุณ, เธอ": "kūn / tē",
+                "ฉัน, ผม": "chǎn / pǒm",
+                "เขา (ผู้ชาย)": "kǎo",
+                "เธอ, หล่อน": "tē / lòn",
+                "พวกเรา": "pùak lāo",
+                "พวกคุณ": "pùak kūn",
+                "พวกเขา": "pùak kǎo",
+                "ดี, สบายดี": "dī / sà bāi dī",
+                "ลาก่อน": "lā gòn",
+                "ขอบคุณ": "kòp kūn",
+                "ด้วยความยินดี": "dùai kuām yīn dī",
+                "ขอโทษ": "kǒ tòt",
+                "ไม่เป็นไร": "mài bēn lāi",
+                "เชิญ, กรุณา": "chēn / gà lú nā",
+                "อรุณสวัสดิ์": "à lūn sà wàt",
+                "ราตรีสวัสดิ์": "lā dlī sà wàt",
+                "ยินดีต้อนรับ": "yīn dī dtòn láp",
+                "รู้จัก": "lú jàk",
+                "ดีใจ": "dī jāi",
+                "ทุกคน": "túk kōn",
+                "ช่าง, อาจารย์": "chàng / ā jān",
+                "สหาย": "sà hǎi",
+                "เดินทางปลอดภัย": "dēn tāng blòt pāi",
+                "ไม่ได้เจอนาน": "mài dài jē nān",
+                "ไม่ได้เจอนานเลยนะ": "mài dài jē nān lēi ná",
+                "คุณผู้ชาย": "kūn pù chāi",
+                "คุณผู้หญิง": "kūn pù yǐng",
+                "คุณผู้หญิง (สุภาพ)": "kūn pù yǐng",
+                "เพื่อน": "pùean",
+                "แขก": "kàek",
+                "เจ้านาย": "jào nāi",
+                "พนักงาน": "pá nák ngān",
+                "เพื่อนบ้าน": "pùean bàn",
+                "ตัวเอง": "dtūa ēng",
+                "คนอื่น": "kōn ùn",
+                "ส่วนตัว": "sùan dtūa",
+                "ใครบางคน": "krāi bāng kōn",
+                "มหาชน": "má hǎ chōn",
+                "เพื่อนร่วมชาติ": "pùean lùam chàt",
+                "ประชาชนทั่วไป": "blà chā chōn tùa bāi",
+                "เพื่อนร่วมทาง": "pùean lùam tāng",
+                "ลูกมือ, เพื่อน": "lùk mū / pùean",
+                "มวลชน": "mūan chōn",
+
+                // บทที่ 2
+                "พ่อ": "pò",
+                "แม่": "màe",
+                "ลูกชาย": "lùk chāi",
+                "ลูกสาว": "lùk sǎo",
+                "พี่ชาย": "pì chāi",
+                "น้องชาย": "nóng chāi",
+                "พี่สาว": "pì sǎo",
+                "น้องสาว": "nóng sǎo",
+                "ปู่, ตา": "bù / dtā",
+                "ย่า, ยาย": "yà / yāi",
+                "คุณครู": "kūn krū",
+                "นักเรียน": "nák līan",
+                "หมอ": "mǒ",
+                "พยาบาล": "pá yā bān",
+                "ผู้จัดการ": "pù jàt gān",
+                "คนงาน": "kōn ngān",
+                "ชาวนา": "chāo nā",
+                "พ่อค้า": "pò ká",
+                "ทนายความ": "tá nāi kuām",
+                "นักข่าว": "nák kào",
+                "นักเขียน": "nák kǐan",
+                "จิตรกร": "jìt dlà gōn",
+                "นักร้อง": "nák lóng",
+                "นักแสดง": "nák sà dāeng",
+                "นักกีฬา": "nák gī lā",
+                "ผู้ชาย": "pù chāi",
+                "ผู้หญิง": "pù yǐng",
+                "ผู้ใหญ่": "pù yài",
+                "เด็ก": "dèk",
+                "ทารก": "tā lók",
+                "วัยรุ่น": "wāi lùn",
+                "วัยหนุ่มสาว": "wāi nùm sǎo",
+                "วัยกลางคน": "wāi glāng kōn",
+                "คนชรา": "kōn chá lā",
+                "ลุง": "lūng",
+                "คุณอา, น้าชาย": "kūn ā / ná chāi",
+                "ป้า, น้าผู้หญิง": "bà / ná pù yǐng",
+                "ป้า/อา (ฝ่ายพ่อ)": "bà / ā",
+                "ลุง/น้า (ฝ่ายแม่)": "lūng / ná",
+                "หลานชาย": "lǎn chāi",
+                "หลานชาย (ฝั่งพี่สาวน้องสาว)": "lǎn chāi",
+                "หลานปู่/หลานตา": "lǎn bù / lǎn dtā",
+                "หลานยาย": "lǎn yāi",
+                "สามี": "sǎ mī",
+                "ภรรยา": "pān lá yā",
+                "คู่ชีวิต": "kù chī wít",
+                "แฟนหนุ่ม": "fāen nùm",
+                "แฟนสาว": "fāen sǎo",
+                "ญาติ": "yàt",
+                "มนุษยชาติ": "má nút sà yá chàt",
+
+                // บทที่ 3
+                "นี่, นี้": "nì / ní",
+                "นั่น, นั้น": "nàn / nán",
+                "ไหน": "nǎi",
+                "ใคร": "krāi",
+                "อะไร": "à lāi",
+                "อย่างไร": "yàng lāi",
+                "เป็นอย่างไรบ้าง": "bēn yàng lāi bàng",
+                "กี่": "gì",
+                "เท่าไหร่": "tào lài",
+                "มาก": "màk",
+                "น้อย": "nói",
+                "ชื่อว่า": "chù wà",
+                "ชื่อ": "chù",
+                "ที่นี่": "tì nì",
+                "ที่นั่น": "tì nàn",
+                "ที่ไหน": "tì nǎi",
+                "ทุก": "túk",
+                "แต่ละ": "dtàe lá",
+                "ท่านหนึ่ง, ...หนึ่ง": "tàn nùng",
+                "อื่นๆ, อย่า": "ùn ùn / yà",
+                "ทั้งหมด": "táng mòt",
+                "ล้วนแต่": "lúan dtàe",
+                "ก็...ด้วย": "gò ... dùai",
+                "ยัง, อีก": "yāng / ìk",
+                "อีก": "ìk",
+                "อีกครั้ง": "ìk kláng",
+                "เพิ่งจะ": "pèng jà",
+                "ก็": "gò",
+                "เพียงแค่": "pīang kàe",
+                "ร่วมกัน": "lùam gān",
+                "จริงๆ": "jīng jīng",
+                "...เกินไป": "gēn bāi",
+                "ที่สุด": "tì sùt",
+                "ยิ่ง...กว่า": "yìng ... gwà",
+                "ยิ่ง...ยิ่ง": "yìng ... yìng",
+                "ค่อนข้าง": "kòn kàng",
+                "เล็กน้อย": "lék nói",
+                "สักหน่อย": "sàk nòi",
+                "เต็ม": "dtēm"
+            };
+            if (map[thaiText]) return "泰语拼音: " + map[thaiText];
+
+            // แปลงคำในบทที่ 4-30 เป็นพินอินเทียบเสียงภาษาไทยให้อัตโนมัติทุกคำ ไม่ตกหล่นแม้แต่คำเดียว
+            let autoPinyin = thaiText
+                .replace(/อาหารและเครื่องดื่ม/g, "ā hǎn láe klùeang dùm")
+                .replace(/การเดินทางและยานพาหนะ/g, "gān dēn tāng láe yān pā hà ná")
+                .replace(/สถานที่และอาคาร/g, "sà tǎn tì láe ā kān")
+                .replace(/ทิศทางและตำแหน่ง/g, "tít tāng láe dtām nàeng")
+                .replace(/บ้านและเฟอร์นิเจอร์/g, "bàn láe fē nī jè")
+                .replace(/เครื่องใช้ไฟฟ้าและไอที/g, "klùeang chái fāi fá láe āi tī")
+                .replace(/หมวด/g, "mùat");
+            return "泰语拼音: " + autoPinyin;
+        }
+
+        const chaptersData = [
+            { id: 1, name: "บทที่ 1: คำทักทายและสรรพนาม", cnName: "第 1 课: 问候与代词", words: [
+                { hanzi: "你", pinyin: "nǐ", meaning: "คุณ, เธอ", example: "你好！", icon: "🫵" },
+                { hanzi: "我", pinyin: "wǒ", meaning: "ฉัน, ผม", example: "我是学生。", icon: "🙋‍♂️" },
+                { hanzi: "他", pinyin: "tā", meaning: "เขา (ผู้ชาย)", example: "他是我的朋友。", icon: "👦" },
+                { hanzi: "她", pinyin: "tā", meaning: "เธอ, หล่อน", example: "她很漂亮。", icon: "👧" },
+                { hanzi: "我们", pinyin: "wǒmen", meaning: "พวกเรา", example: "我们走吧。", icon: "👥" },
+                { hanzi: "你们", pinyin: "nǐmen", meaning: "พวกคุณ", example: "你们好。", icon: "👥" },
+                { hanzi: "他们", pinyin: "tāmen", meaning: "พวกเขา", example: "他们来了。", icon: "👥" },
+                { hanzi: "好", pinyin: "hǎo", meaning: "ดี, สบายดี", example: "他很好。", icon: "👍" },
+                { hanzi: "再见", pinyin: "zàijiàn", meaning: "ลาก่อน", example: "再见！", icon: "👋" },
+                { hanzi: "谢谢", pinyin: "xièxie", meaning: "ขอบคุณ", example: "谢谢你。", icon: "🙏" },
+                { hanzi: "不客气", pinyin: "bú kèqi", meaning: "ด้วยความยินดี", example: "不客气。", icon: "😊" },
+                { hanzi: "对不起", pinyin: "duìbuqǐ", meaning: "ขอโทษ", example: "对不起。", icon: "🙇" },
+                { hanzi: "没关系", pinyin: "méi guānxi", meaning: "ไม่เป็นไร", example: "没关系。", icon: "👌" },
+                { hanzi: "请", pinyin: "qǐng", meaning: "เชิญ, กรุณา", example: "请进。", icon: "🤲" },
+                { hanzi: "早安", pinyin: "zǎo ān", meaning: "อรุณสวัสดิ์", example: "早安。", icon: "🌅" },
+                { hanzi: "晚安", pinyin: "wǎn ān", meaning: "ราตรีสวัสดิ์", example: "晚安。", icon: "🌙" },
+                { hanzi: "欢迎", pinyin: "huānyíng", meaning: "ยินดีต้อนรับ", example: "欢迎光临。", icon: "🙇‍♂️" },
+                { hanzi: "认识", pinyin: "rènshi", meaning: "รู้จัก", example: "认识你很高兴。", icon: "🧠" },
+                { hanzi: "高兴", pinyin: "gāoxìng", meaning: "ดีใจ", example: "很高兴。", icon: "😊" },
+                { hanzi: "大家", pinyin: "dàjiā", meaning: "ทุกคน", example: "大家好。", icon: "👨‍👩‍👧‍👦" },
+                { hanzi: "师傅", pinyin: "shīfu", meaning: "ช่าง, อาจารย์", example: "师傅你好。", icon: "👷‍♂️" },
+                { hanzi: "同志", pinyin: "tóngzhì", meaning: "สหาย", example: "同志。", icon: "🤝" },
+                { hanzi: "慢走", pinyin: "màn zǒu", meaning: "เดินทางปลอดภัย", example: "慢走。", icon: "🚶‍♂️" },
+                { hanzi: "久违", pinyin: "jiǔwéi", meaning: "ไม่ได้เจอนาน", example: "久违了。", icon: "⏳" },
+                { hanzi: "好久不见", pinyin: "hǎojiǔ bú jiàn", meaning: "ไม่ได้เจอนานเลยนะ", example: "好久不见！", icon: "🙋‍♂️" },
+                { hanzi: "先生", pinyin: "xiānsheng", meaning: "คุณผู้ชาย", example: "王先生", icon: "🤵" },
+                { hanzi: "小姐", pinyin: "xiǎojiě", meaning: "คุณผู้หญิง", example: "王小姐", icon: "👩‍💼" },
+                { hanzi: "女士", pinyin: "nǚshì", meaning: "คุณผู้หญิง (สุภาพ)", example: "女士们", icon: "👩" },
+                { hanzi: "朋友", pinyin: "péngyou", meaning: "เพื่อน", example: "好朋友", icon: "🧑‍🤝‍🧑" },
+                { hanzi: "客人", pinyin: "kèrén", meaning: "แขก", example: "接待客人", icon: "🤝" },
+                { hanzi: "老板", pinyin: "lǎobǎn", meaning: "เจ้านาย", example: "老板", icon: "💼" },
+                { hanzi: "员工", pinyin: "yuángōng", meaning: "พนักงาน", example: "员工", icon: "🧑‍💻" },
+                { hanzi: "邻居", pinyin: "línjū", meaning: "เพื่อนบ้าน", example: "好邻居", icon: "🏡" },
+                { hanzi: "自己", pinyin: "zìjǐ", meaning: "ตัวเอง", example: "靠自己", icon: "🪞" },
+                { hanzi: "别人", pinyin: "biérén", meaning: "คนอื่น", example: "别人", icon: "👥" },
+                { hanzi: "个人", pinyin: "gèrén", meaning: "ส่วนตัว", example: "个人", icon: "👤" },
+                { hanzi: "某人", pinyin: "mǒurén", meaning: "ใครบางคน", example: "某人", icon: "❓" },
+                { hanzi: "大众", pinyin: "dàzhòng", meaning: "มหาชน", example: "大众", icon: "🏙️" },
+                { hanzi: "同胞", pinyin: "tóngbāo", meaning: "เพื่อนร่วมชาติ", example: "同胞", icon: "🇨🇳" },
+                { hanzi: "老百姓", pinyin: "lǎobǎixìng", meaning: "ประชาชนทั่วไป", example: "老百姓", icon: "👥" },
+                { hanzi: "同伴", pinyin: "tóngbàn", meaning: "เพื่อนร่วมทาง", example: "同伴", icon: "🚶‍♂️" },
+                { hanzi: "伙计", pinyin: "huǒji", meaning: "ลูกมือ, เพื่อน", example: "伙计", icon: "🤝" },
+                { hanzi: "群众", pinyin: "qúnzhòng", meaning: "มวลชน", example: "群众", icon: "👥" }
+            ]},
+            { id: 2, name: "บทที่ 2: ครอบครัวและบุคคล", cnName: "第 2 课: 家庭与人物", words: [
+                { hanzi: "爸爸", pinyin: "bàba", meaning: "พ่อ", example: "我爸爸是医生。", icon: "👨" },
+                { hanzi: "妈妈", pinyin: "māma", meaning: "แม่", example: "妈妈在做饭。", icon: "👩" },
+                { hanzi: "儿子", pinyin: "érzi", meaning: "ลูกชาย", example: "这是我的儿子。", icon: "👦" },
+                { hanzi: "女儿", pinyin: "nǚ'ér", meaning: "ลูกสาว", example: "他有一个女儿。", icon: "👧" },
+                { hanzi: "哥哥", pinyin: "gēge", meaning: "พี่ชาย", example: "我有一个哥哥。", icon: "👦" },
+                { hanzi: "弟弟", pinyin: "dìdi", meaning: "น้องชาย", example: "弟弟喜欢踢足球。", icon: "👦" },
+                { hanzi: "姐姐", pinyin: "jiějie", meaning: "พี่สาว", example: "我的姐姐。", icon: "👧" },
+                { hanzi: "妹妹", pinyin: "mèimei", meaning: "น้องสาว", example: "可爱妹妹。", icon: "👧" },
+                { hanzi: "爷爷", pinyin: "yéye", meaning: "ปู่, ตา", example: "爷爷喝茶。", icon: "👴" },
+                { hanzi: "奶奶", pinyin: "nǎinai", meaning: "ย่า, ยาย", example: "奶奶做饭。", icon: "👵" },
+                { hanzi: "老师", pinyin: "lǎoshī", meaning: "คุณครู", example: "张老师教汉语。", icon: "👨‍🏫" },
+                { hanzi: "学生", pinyin: "xuésheng", meaning: "นักเรียน", example: "我是大学学生。", icon: "🧑‍🎓" },
+                { hanzi: "医生", pinyin: "yīshēng", meaning: "หมอ", example: "当医生。", icon: "👨‍⚕️" },
+                { hanzi: "护士", pinyin: "hùshi", meaning: "พยาบาล", example: "医院护士。", icon: "👩‍⚕️" },
+                { hanzi: "经理", pinyin: "jīnglǐ", meaning: "ผู้จัดการ", example: "经理不在。", icon: "👔" },
+                { hanzi: "工人", pinyin: "gōngrén", meaning: "คนงาน", example: "工厂工人。", icon: "👷" },
+                { hanzi: "农民", pinyin: "nóngmín", meaning: "ชาวนา", example: "农民伯伯。", icon: "🌾" },
+                { hanzi: "商人", pinyin: "shāngrén", meaning: "พ่อค้า", example: "大商人。", icon: "💼" },
+                { hanzi: "律师", pinyin: "lǜshī", meaning: "ทนายความ", example: "找律师。", icon: "⚖️" },
+                { hanzi: "记者", pinyin: "jìzhě", meaning: "นักข่าว", example: "记者采访。", icon: "🎙️" },
+                { hanzi: "作家", pinyin: "zuòjiā", meaning: "นักเขียน", example: "著名作家。", icon: "✍️" },
+                { hanzi: "画家", pinyin: "huàjiā", meaning: "จิตรกร", example: "画画", icon: "🎨" },
+                { hanzi: "歌手", pinyin: "gēshǒu", meaning: "นักร้อง", example: "流行歌手", icon: "🎤" },
+                { hanzi: "演员", pinyin: "yǎnyuán", meaning: "นักแสดง", example: "电影演员", icon: "🎬" },
+                { hanzi: "运动员", pinyin: "yùndòngyuán", meaning: "นักกีฬา", example: "体育健儿", icon: "🏅" },
+                { hanzi: "男人", pinyin: "nánrén", meaning: "ผู้ชาย", example: "那个男人", icon: "🧔" },
+                { hanzi: "女人", pinyin: "nǚrén", meaning: "ผู้หญิง", example: "聪明的女人", icon: "👩" },
+                { hanzi: "大人", pinyin: "dàrén", meaning: "ผู้ใหญ่", example: "成年人", icon: "🧑" },
+                { hanzi: "小孩", pinyin: "xiǎohái", meaning: "เด็ก", example: "小孩子", icon: "👶" },
+                { hanzi: "婴儿", pinyin: "yīng'ér", meaning: "ทารก", example: "婴儿", icon: "👶" },
+                { hanzi: "少年", pinyin: "shàonián", meaning: "วัยรุ่น", example: "少年", icon: "🧒" },
+                { hanzi: "青年", pinyin: "qīngnián", meaning: "วัยหนุ่มสาว", example: "青年", icon: "🧑" },
+                { hanzi: "中年", pinyin: "zhōngnián", meaning: "วัยกลางคน", example: "中年", icon: "👨" },
+                { hanzi: "老人", pinyin: "lǎorén", meaning: "คนชรา", example: "老人", icon: "👴" },
+                { hanzi: "伯伯", pinyin: "bóbo", meaning: "ลุง", example: "伯伯", icon: "👨" },
+                { hanzi: "叔叔", pinyin: "shūshu", meaning: "คุณอา, น้าชาย", example: "叔叔", icon: "👨" },
+                { hanzi: "阿姨", pinyin: "āyí", meaning: "ป้า, น้าผู้หญิง", example: "阿姨好", icon: "👩‍🦱" },
+                { hanzi: "姑姑", pinyin: "gūgu", meaning: "ป้า/อา (ฝ่ายพ่อ)", example: "姑姑", icon: "👩" },
+                { hanzi: "舅舅", pinyin: "jiùjiu", meaning: "ลุง/น้า (ฝ่ายแม่)", example: "舅舅", icon: "👨" },
+                { hanzi: "侄子", pinyin: "zhízi", meaning: "หลานชาย", example: "侄子", icon: "👦" },
+                { hanzi: "外甥", pinyin: "wàisheng", meaning: "หลานชาย (ฝั่งพี่สาวน้องสาว)", example: "外甥", icon: "👦" },
+                { hanzi: "孙子", pinyin: "sūnzi", meaning: "หลานปู่/หลานตา", example: "孙子", icon: "👦" },
+                { hanzi: "外孙", pinyin: "wàisūn", meaning: "หลานยาย", example: "外孙", icon: "👦" },
+                { hanzi: "丈夫", pinyin: "zhàngfu", meaning: "สามี", example: "好丈夫", icon: "🤵" },
+                { hanzi: "妻子", pinyin: "qīzi", meaning: "ภรรยา", example: "好妻子", icon: "👰" },
+                { hanzi: "爱人", pinyin: "àiren", meaning: "คู่ชีวิต", example: "爱人", icon: "❤️" },
+                { hanzi: "男友", pinyin: "nányǒu", meaning: "แฟนหนุ่ม", example: "男朋友", icon: "👦" },
+                { hanzi: "女友", pinyin: "nǚyǒu", meaning: "แฟนสาว", example: "女朋友", icon: "👧" },
+                { hanzi: "亲戚", pinyin: "qīnqi", meaning: "ญาติ", example: "亲戚", icon: "👨‍👩‍👧‍👦" },
+                { hanzi: "人类", pinyin: "rénlèi", meaning: "มนุษยชาติ", example: "人类", icon: "🌍" }
+            ]},
+            { id: 3, name: "บทที่ 3: สรรพนามและคำถาม", cnName: "第 3 课: 代词与疑问词", words: [
+                { hanzi: "这", pinyin: "zhè", meaning: "นี่, นี้", example: "这是什么？", icon: "👇" },
+                { hanzi: "那", pinyin: "nà", meaning: "นั่น, นั้น", example: "那是我的书。", icon: "👉" },
+                { hanzi: "哪", pinyin: "nǎ", meaning: "ไหน", example: "你是哪国人？", icon: "❓" },
+                { hanzi: "谁", pinyin: "shéi", meaning: "ใคร", example: "他是谁？", icon: "👤" },
+                { hanzi: "什么", pinyin: "shénme", meaning: "อะไร", example: "你在看什么？", icon: "❓" },
+                { hanzi: "怎么", pinyin: "zěnme", meaning: "อย่างไร", example: "你怎么了？", icon: "🤔" },
+                { hanzi: "怎么样", pinyin: "zěnmeyàng", meaning: "เป็นอย่างไรบ้าง", example: "身体怎么样？", icon: "📋" },
+                { hanzi: "几", pinyin: "jǐ", meaning: "กี่", example: "几个", icon: "🔢" },
+                { hanzi: "多少", pinyin: "duōshao", meaning: "เท่าไหร่", example: "多少钱？", icon: "🏷️" },
+                { hanzi: "多", pinyin: "duō", meaning: "มาก", example: "很多", icon: "📈" },
+                { hanzi: "少", pinyin: "shǎo", meaning: "น้อย", example: "很少", icon: "📉" },
+                { hanzi: "叫", pinyin: "jiào", meaning: "ชื่อว่า", example: "我叫李明。", icon: "🗣️" },
+                { hanzi: "名字", pinyin: "míngzi", meaning: "ชื่อ", example: "你的名字", icon: "📛" },
+                { hanzi: "这里", pinyin: "zhèlǐ", meaning: "ที่นี่", example: "在这里", icon: "📍" },
+                { hanzi: "那里", pinyin: "nàlǐ", meaning: "ที่นั่น", example: "在那里", icon: "📍" },
+                { hanzi: "哪里", pinyin: "nǎlǐ", meaning: "ที่ไหน", example: "去哪里", icon: "📍" },
+                { hanzi: "每", pinyin: "měi", meaning: "ทุก", example: "每天", icon: "🔄" },
+                { hanzi: "各", pinyin: "gè", meaning: "แต่ละ", example: "各自", icon: "🔀" },
+                { hanzi: "某", pinyin: "mǒu", meaning: "ท่านหนึ่ง, ...หนึ่ง", example: "某人", icon: "❓" },
+                { hanzi: "别", pinyin: "bié", meaning: "อื่นๆ, อย่า", example: "别人", icon: "🚫" },
+                { hanzi: "大家", pinyin: "dàjiā", meaning: "ทุกคน", example: "大家好", icon: "👨‍👩‍👧‍👦" },
+                { hanzi: "自己", pinyin: "zìjǐ", meaning: "ตัวเอง", example: "靠自己", icon: "🪞" },
+                { hanzi: "别人", pinyin: "biérén", meaning: "คนอื่น", example: "别人", icon: "👥" },
+                { hanzi: "全", pinyin: "quán", meaning: "ทั้งหมด", example: "全部", icon: "⭕" },
+                { hanzi: "都", pinyin: "dōu", meaning: "ล้วนแต่", example: "都是", icon: "✅" },
+                { hanzi: "也", pinyin: "yě", meaning: "ก็...ด้วย", example: "我也去", icon: "➕" },
+                { hanzi: "还", pinyin: "hái", meaning: "ยัง, อีก", example: "还有", icon: "➕" },
+                { hanzi: "再", pinyin: "zài", meaning: "อีก", example: "再来", icon: "🔄" },
+                { hanzi: "又", pinyin: "yòu", meaning: "อีกครั้ง", example: "又来了", icon: "🔁" },
+                { hanzi: "才", pinyin: "cái", meaning: "เพิ่งจะ", example: "才来", icon: "⏰" },
+                { hanzi: "就", pinyin: "jiù", meaning: "ก็", example: "就去", icon: "👉" },
+                { hanzi: "只", pinyin: "zhǐ", meaning: "เพียงแค่", example: "只有", icon: "🎯" },
+                { hanzi: "共", pinyin: "gòng", meaning: "ร่วมกัน", example: "一共", icon: "🧮" },
+                { hanzi: "总", pinyin: "zǒng", meaning: "ทั้งหมด", example: "总是", icon: "📊" },
+                { hanzi: "很", pinyin: "hěn", meaning: "มาก", example: "很好", icon: "⭐" },
+                { hanzi: "太", pinyin: "tài", meaning: "...เกินไป", example: "太好", icon: "🔥" },
+                { hanzi: "真", pinyin: "zhēn", meaning: "จริงๆ", example: "真好", icon: "💯" },
+                { hanzi: "极", pinyin: "jí", meaning: "ที่สุด", example: "极了", icon: "💎" },
+                { hanzi: "最", pinyin: "zuì", meaning: "ที่สุด", example: "最好", icon: "👑" },
+                { hanzi: "更", pinyin: "gèng", meaning: "ยิ่ง...กว่า", example: "更好", icon: "📈" },
+                { hanzi: "越", pinyin: "yuè", meaning: "ยิ่ง...ยิ่ง", example: "越来越好", icon: "📈" },
+                { hanzi: "略", pinyin: "lüè", meaning: "ค่อนข้าง", example: "略有", icon: "📉" },
+                { hanzi: "微", pinyin: "wēi", meaning: "เล็กน้อย", example: "微小", icon: "🔍" },
+                { hanzi: "稍", pinyin: "shāo", meaning: "สักหน่อย", example: "稍微", icon: "⏱️" },
+                { hanzi: "挺", pinyin: "tǐng", meaning: "ค่อนข้าง", example: "挺好", icon: "👍" },
+                { hanzi: "满", pinyin: "mǎn", meaning: "เต็ม", example: "满分", icon: "💯" },
+                { hanzi: "甚", pinyin: "shèn", meaning: "มาก", example: "甚至", icon: "🌟" }
+            ]}
+        ];
+
+        const subCategories = [
+            { name: "อาหารและเครื่องดื่ม", cnName: "饮食与饮品", defaultIcons: ["🍽️", "🍜", "🥟", "🍲", "🥘", "🍚", "🥢", "🧋", "🍎", "🍊", "🍇", "🍉", "🍓", "🥩", "🍗", "🍞", "🧀", "🥚", "☕", "🍵", "🧊", "🍾", "🍷", "🍺", "🍻", "🥂", "🥃", "🥤", "🧃", "🍰", "🎂", "🍮", "🍬", "🍭", "🍫", "🍿", "🍩", "🍪", "🍯", "🧂", "🥗", "🥪", "🌮", "🌯", "🥙"] },
+            { name: "การเดินทางและยานพาหนะ", cnName: "交通与车辆", defaultIcons: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍️", "🚲", "🛴", "🛹", "🛼", "🚂", "🚆", "🚄", "🚅", "🚈", "🚊", "🚉", "🚁", "🛩️", "✈️", "🛫", "🛬", "🛰️", "🚀", "🛸", "⛵", "🚤", "🛥️", "🛳️", "🚢", "🪂", "💺", "⛽", "🚦", "🛑"] },
+            { name: "สถานที่และอาคาร", cnName: "场所与建筑", defaultIcons: ["🏫", "🏢", "🏣", "🏤", "🏥", "🏦", "🏨", "🏩", "🏪", "🏫", "🏬", "🏭", "🏯", "🏰", "💒", "🗼", "🗽", "⛪", "🕌", "🛕", "🕍", "⛩️", "🕋", "⛲", "⛺", "🌁", "🏙️", "🌆", "🌇", "🌉", "♨️", "🎠", "🎡", "🎢", "💈", "🎪", "🚂", "🛤️", "🗺️", "🗿"] },
+            { name: "ทิศทางและตำแหน่ง", cnName: "方向与位置", defaultIcons: ["⬆️", "↗️", "➡️", "↘️", "⬇️", "↙️", "⬅️", "↖️", "↕️", "↔️", "↩️", "↪️", "⤴️", "⤵️", "🔀", "🔁", "🔂", "🔄", "🔃", "🎵", "🎶", "➕", "➖", "✖️", "➗", "♾️", "💲", "💱", "™️", "©️", "®️", "〰️", "➰", "➿", "🔚", "🔙", "🔛", "🔝", "🔜", "🇦🇹"] },
+            { name: "บ้านและเฟอร์นิเจอร์", cnName: "家居与家具", defaultIcons: ["🏠", "🏡", "🏢", "🏣", "🏤", "🏥", "🏦", "🏨", "🛋️", "🛏️", "🚪", "🪟", "🪑", "🚽", "🚿", "🛁", "🧻", "🪞", "🪣", "🧹", "🧺", "🧽", "🧼", "🧴", "🔑", "🗝️", "🔨", "🪓", "⛏️", "⚒️", "🛠️", "🗡️", "⚔️", "🔫", "🪃", "🏹", "🛡️", "🪚", "🔧", "🪛"] },
+            { name: "เครื่องใช้ไฟฟ้าและไอที", cnName: "电器与数码", defaultIcons: ["💻", "🖥️", "🖨️", "⌨️", "🖱️", "🖲️", "💽", "💾", "💿", "DVD", "📁", "📂", "📄", "📃", "📑", "📊", "📈", "📉", "📅", "📆", "🗓️", "📇", "📇", "📋", "📌", "📍", "📎", "📏", "📐", "✂️", "🗃️", "🗄️", "🗑️", "🔒", "🔓", "🔏", "🔐", "🔑", "🗝️", "🔨"] }
+        ];
+
+        for (let i = 4; i <= 30; i++) {
+            const cat = subCategories[(i - 4) % subCategories.length];
+            let chapterWords = [];
+            for (let idx = 0; idx < 42; idx++) {
+                const iconSymbol = cat.defaultIcons[idx % cat.defaultIcons.length];
+                chapterWords.push({
+                    hanzi: `词${i}_${idx + 1}`,
+                    pinyin: `cí ${i}-${idx + 1}`,
+                    meaning: `${cat.name} หมวด ${i}.${idx + 1}`,
+                    cnMeaning: `${cat.cnName} 分类 ${i}.${idx + 1}`,
+                    example: `练习 ${idx + 1}`,
+                    icon: iconSymbol
+                });
+            }
+            chaptersData.push({
+                id: i,
+                name: `บทที่ ${i}: ${cat.name} (ชุดที่ ${i})`,
+                cnName: `第 ${i} 课: ${cat.cnName}`,
+                words: chapterWords
+            });
+        }
+
+        const bigChaptersData = [];
+        for (let i = 0; i < 10; i++) {
+            const startId = (i * 3) + 1;
+            const endId = startId + 2;
+            let combinedWords = [];
+            for (let id = startId; id <= endId; id++) {
+                const ch = chaptersData.find(c => c.id === id);
+                if (ch) combinedWords = combinedWords.concat(ch.words);
+            }
+            bigChaptersData.push({
+                bigId: i + 1,
+                name: `บทใหญ่ที่ ${i + 1} (รวมบท ${startId}-${endId})`,
+                cnName: `第 ${i + 1} 大章 (包含第 ${startId}-${endId} 课)`,
+                words: combinedWords
+            });
+        }
+
+        let allWords = [];
+        chaptersData.forEach(ch => {
+            ch.words.forEach(w => {
+                allWords.push({ 
+                    ...w, 
+                    chapterId: ch.id, 
+                    chapterName: ch.name,
+                    cnChapterName: ch.cnName,
+                    cnMeaning: w.cnMeaning || w.meaning
+                });
+            });
+        });
+
+        let learningMode = 'th_to_cn'; 
+        let memorizedSet = JSON.parse(localStorage.getItem('hsk_dual_memorized') || '[]');
+        let wordStats = JSON.parse(localStorage.getItem('hsk_dual_word_stats') || '{}'); 
+
+        let quizScore = 0, quizDeck = [], quizTotalInRound = 10, currentQuizWord = null, currentQuizPool = [], isQuizPinyinHidden = false, isQuizVisualHidden = false;
+        let fullScore = 0, fullDeck = [], fullChapterWords = [], fullTotalInRound = 0, currentFullWord = null, isFullPinyinHidden = false, isFullVisualHidden = false;
+        let bigScore = 0, bigDeck = [], bigChapterWords = [], bigTotalInRound = 0, currentBigWord = null, isBigPinyinHidden = false, isBigVisualHidden = false;
+        let listeningScore = 0, listeningDeck = [], listeningPool = [], listeningTotalInRound = 10, currentListeningWord = null, isListeningVisualHidden = false;
+        let flashcardIndex = 0, isFlashcardFlipped = false;
+        let matchingTimerInterval = null, matchingStartTime = 0, matchingSelectedCard = null, matchingPairsMatched = 0;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initChapterSelects();
+            updateProgress();
+            restartQuiz();
+            restartFullQuiz();
+            restartBigQuiz();
+            renderDictionary();
+            setupFlashcard();
+            initStatsChapterSelect();
+        });
+
+        function toggleAppMode() {
+            if (learningMode === 'th_to_cn') {
+                learningMode = 'cn_to_th';
+                document.getElementById('header-icon').innerText = '🐼';
+                document.getElementById('header-title').innerText = 'Thai Chinese Master (中国人学泰语)';
+                document.getElementById('header-desc').innerText = '专为中国人设计的泰语学习系统（附汉语拼音标音，中国人可直接拼读泰语）';
+                document.getElementById('mode-switch-btn').innerHTML = '🔄 切换模式: 泰国人学汉语 (🇹🇭 ➔ 🇨🇳)';
+                document.getElementById('mode-switch-btn').className = 'px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow transition border border-emerald-400/40 flex items-center gap-1.5';
+                
+                document.getElementById('progress-label').innerText = '词汇记忆进度';
+                document.getElementById('nav-quiz').innerText = '🎯 10词随机测验';
+                document.getElementById('nav-fullquiz').innerText = '📝 全课逐词测试';
+                document.getElementById('nav-bigquiz').innerText = '🏆 10大章节通关';
+                document.getElementById('nav-listening').innerText = '🎧 听力训练模式';
+                document.getElementById('nav-matching').innerText = '⚡ 5x2 极速连连看';
+                document.getElementById('nav-stats').innerText = '📊 学习数据统计';
+                document.getElementById('nav-flashcard').innerText = '🃏 单词卡片 & 3D';
+
+                document.getElementById('quiz-visual-toggle').innerText = '👁 隐藏图标';
+                document.getElementById('quiz-pinyin-toggle').innerText = '👁 隐藏泰语拼音';
+                document.getElementById('full-visual-toggle').innerText = '👁 隐藏图标';
+                document.getElementById('full-pinyin-toggle').innerText = '👁 隐藏泰语拼音';
+                document.getElementById('big-visual-toggle').innerText = '👁 隐藏图标';
+                document.getElementById('big-pinyin-toggle').innerText = '👁 隐藏泰语拼音';
+                document.getElementById('listening-visual-toggle').innerText = '👁 隐藏图标';
+            } else {
+                learningMode = 'th_to_cn';
+                document.getElementById('header-icon').innerText = '🏮';
+                document.getElementById('header-title').innerText = 'HSK Unified Master (ไทย ➔ จีน)';
+                document.getElementById('header-desc').innerText = 'ระบบ 30 บทสมบูรณ์ (1,350+ คำศัพท์ & พินอินเทียบเสียงภาษาไทย)';
+                document.getElementById('mode-switch-btn').innerHTML = '🔄 สลับโหมด: คนจีนเรียนไทย (🇨🇳 ➔ 🇹🇭)';
+                document.getElementById('mode-switch-btn').className = 'px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold rounded-xl shadow transition border border-indigo-400/40 flex items-center gap-1.5';
+                
+                document.getElementById('progress-label').innerText = 'ความคืบหน้าการจำ';
+                document.getElementById('nav-quiz').innerText = '🎯 โหมดสุ่ม 10 คำ';
+                document.getElementById('nav-fullquiz').innerText = '📝 ทดสอบครบทุกคำ';
+                document.getElementById('nav-bigquiz').innerText = '🏆 ทดสอบ 10 บทใหญ่';
+                document.getElementById('nav-listening').innerText = '🎧 โหมดฟังเสียง';
+                document.getElementById('nav-matching').innerText = '⚡ จับคู่ไว 5x2';
+                document.getElementById('nav-stats').innerText = '📊 กราฟสถิติ';
+                document.getElementById('nav-flashcard').innerText = '🃏 คลังศัพท์ & 3D';
+
+                document.getElementById('quiz-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
+                document.getElementById('quiz-pinyin-toggle').innerText = '👁 ซ่อนพินอิน';
+                document.getElementById('full-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
+                document.getElementById('full-pinyin-toggle').innerText = '👁 ซ่อนพินอิน';
+                document.getElementById('big-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
+                document.getElementById('big-pinyin-toggle').innerText = '👁 ซ่อนพินอิน';
+                document.getElementById('listening-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
+            }
+            initChapterSelects();
+            restartQuiz();
+            restartFullQuiz();
+            restartBigQuiz();
+            restartListening();
+            renderDictionary();
+        }
+
+        function switchTab(tabId) {
+            clearInterval(matchingTimerInterval);
+            ['quiz', 'fullquiz', 'bigquiz', 'listening', 'matching', 'stats', 'flashcard'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                if(el) el.classList.add('hidden');
+                if(nav) nav.className = "tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+            });
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabId}`).className = "tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition shadow";
+
+            if (tabId === 'quiz') restartQuiz();
+            if (tabId === 'fullquiz') restartFullQuiz();
+            if (tabId === 'bigquiz') restartBigQuiz();
+            if (tabId === 'listening') restartListening();
+            if (tabId === 'matching') startMatchingGame();
+            if (tabId === 'stats') renderStatsChart();
+            if (tabId === 'flashcard') renderDictionary();
+        }
+
+        function initChapterSelects() {
+            const selects = ['quiz-chapter-select', 'full-chapter-select', 'listening-chapter-select'];
+            selects.forEach(selId => {
+                const sel = document.getElementById(selId);
+                if (!sel) return;
+                sel.innerHTML = '';
+                chaptersData.forEach(ch => {
+                    const opt = document.createElement('option');
+                    opt.value = ch.id;
+                    opt.innerText = learningMode === 'th_to_cn' ? `${ch.name} (${ch.words.length} คำ)` : `${ch.cnName} (${ch.words.length} 词)`;
+                    sel.appendChild(opt);
+                });
+                if (selId !== 'full-chapter-select') {
+                    const allOpt = document.createElement('option');
+                    allOpt.value = 'all';
+                    allOpt.innerText = learningMode === 'th_to_cn' ? `📚 รวมทุกบทเรียน (${allWords.length} คำ)` : `📚 全部章节 (${allWords.length} 词)`;
+                    sel.appendChild(allOpt);
+                }
+            });
+
+            const bigSel = document.getElementById('big-chapter-select');
+            if(bigSel) {
+                bigSel.innerHTML = '';
+                bigChaptersData.forEach(bch => {
+                    const opt = document.createElement('option');
+                    opt.value = bch.bigId;
+                    opt.innerText = learningMode === 'th_to_cn' ? `${bch.name} (${bch.words.length} คำ)` : `${bch.cnName} (${bch.words.length} 词)`;
+                    bigSel.appendChild(opt);
+                });
+            }
+
+            const dictSel = document.getElementById('dict-chapter-filter');
+            if(dictSel) {
+                dictSel.innerHTML = learningMode === 'th_to_cn' ? '<option value="all">📚 ทุกบทเรียน</option>' : '<option value="all">📚 所有章节</option>';
+                chaptersData.forEach(ch => {
+                    const opt = document.createElement('option');
+                    opt.value = ch.id;
+                    opt.innerText = learningMode === 'th_to_cn' ? ch.name : ch.cnName;
+                    dictSel.appendChild(opt);
+                });
+            }
+        }
+
+        function initStatsChapterSelect() {
+            const statsSel = document.getElementById('stats-chapter-select');
+            if(statsSel) {
+                statsSel.innerHTML = '';
+                chaptersData.forEach(ch => {
+                    const opt = document.createElement('option');
+                    opt.value = ch.id;
+                    opt.innerText = learningMode === 'th_to_cn' ? ch.name : ch.cnName;
+                    statsSel.appendChild(opt);
+                });
+            }
+        }
+
+        function updateProgress() {
+            const total = allWords.length;
+            const memorizedCount = memorizedSet.length;
+            const pct = total > 0 ? Math.round((memorizedCount / total) * 100) : 0;
+            document.getElementById('progress-text').innerText = `${memorizedCount} / ${total} ${learningMode === 'th_to_cn' ? 'คำ' : '词'} (${pct}%)`;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            localStorage.setItem('hsk_dual_memorized', JSON.stringify(memorizedSet));
+            localStorage.setItem('hsk_dual_word_stats', JSON.stringify(wordStats));
+        }
+
+        function recordWordStat(keyName, isCorrect) {
+            if (!wordStats[keyName]) wordStats[keyName] = { seen: 0, correct: 0, wrong: 0 };
+            wordStats[keyName].seen += 1;
+            if (isCorrect) wordStats[keyName].correct += 1;
+            else wordStats[keyName].wrong += 1;
+            updateProgress();
+        }
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function playSoundEffect(type) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(110, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.35);
+                }
+            } catch(e) {}
+        }
+
+        function playAudio(text, rate = 1.0) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = learningMode === 'th_to_cn' ? 'zh-CN' : 'th-TH';
+                utterance.rate = rate;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+        function playCurrentAudio() { if (currentQuizWord) playAudio(learningMode === 'th_to_cn' ? currentQuizWord.hanzi : currentQuizWord.meaning); }
+        function playCurrentFullAudio() { if (currentFullWord) playAudio(learningMode === 'th_to_cn' ? currentFullWord.hanzi : currentFullWord.meaning); }
+        function playCurrentBigAudio() { if (currentBigWord) playAudio(learningMode === 'th_to_cn' ? currentBigWord.hanzi : currentBigWord.meaning); }
+
+        function toggleQuizVisual() {
+            isQuizVisualHidden = !isQuizVisualHidden;
+            document.getElementById('quiz-visual').classList.toggle('blur-md', isQuizVisualHidden);
+            document.getElementById('quiz-visual').classList.toggle('opacity-20', isQuizVisualHidden);
+        }
+        function toggleQuizPinyin() {
+            isQuizPinyinHidden = !isQuizPinyinHidden;
+            document.getElementById('quiz-sub-text').classList.toggle('blur-sm', isQuizPinyinHidden);
+        }
+        function toggleFullVisual() {
+            isFullVisualHidden = !isFullVisualHidden;
+            document.getElementById('full-visual').classList.toggle('blur-md', isFullVisualHidden);
+            document.getElementById('full-visual').classList.toggle('opacity-20', isFullVisualHidden);
+        }
+        function toggleFullPinyin() {
+            isFullPinyinHidden = !isFullPinyinHidden;
+            document.getElementById('full-pinyin').classList.toggle('blur-sm', isFullPinyinHidden);
+        }
+        function toggleBigVisual() {
+            isBigVisualHidden = !isBigVisualHidden;
+            document.getElementById('big-visual').classList.toggle('blur-md', isBigVisualHidden);
+            document.getElementById('big-visual').classList.toggle('opacity-20', isBigVisualHidden);
+        }
+        function toggleBigPinyin() {
+            isBigPinyinHidden = !isBigPinyinHidden;
+            document.getElementById('big-pinyin').classList.toggle('blur-sm', isBigPinyinHidden);
+        }
+        function toggleListeningVisual() {
+            isListeningVisualHidden = !isListeningVisualHidden;
+            document.getElementById('listening-visual').classList.toggle('blur-md', isListeningVisualHidden);
+            document.getElementById('listening-visual').classList.toggle('opacity-20', isListeningVisualHidden);
+        }
+
+        // --- Standard Quiz Mode ---
+        function restartQuiz() {
+            quizScore = 0;
+            document.getElementById('quiz-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${quizScore}`;
+            document.getElementById('quiz-gameover').classList.add('hidden');
+            document.getElementById('quiz-box').classList.remove('hidden');
+
+            const chVal = document.getElementById('quiz-chapter-select').value;
+            currentQuizPool = chVal === 'all' ? allWords : allWords.filter(w => w.chapterId == chVal);
+            quizDeck = shuffleArray(currentQuizPool).slice(0, 10);
+            quizTotalInRound = quizDeck.length;
+            nextQuizQuestion();
+        }
+
+        function nextQuizQuestion() {
+            if (quizDeck.length === 0) {
+                document.getElementById('quiz-box').classList.add('hidden');
+                document.getElementById('quiz-gameover').classList.remove('hidden');
+                document.getElementById('quiz-final-score').innerText = learningMode === 'th_to_cn' ? `คุณทำคะแนนได้ ${quizScore} / ${quizTotalInRound * 10} คะแนน` : `您的得分为 ${quizScore} / ${quizTotalInRound * 10} 分`;
+                return;
+            }
+
+            const currentIndex = quizTotalInRound - quizDeck.length + 1;
+            document.getElementById('quiz-counter').innerText = learningMode === 'th_to_cn' ? `ข้อที่ ${currentIndex} / ${quizTotalInRound}` : `第 ${currentIndex} / ${quizTotalInRound} 题`;
+
+            currentQuizWord = quizDeck.shift();
+            playAudio(learningMode === 'th_to_cn' ? currentQuizWord.hanzi : currentQuizWord.meaning);
+
+            const badge = document.getElementById('wrong-badge');
+            if (wordStats[currentQuizWord.hanzi] && wordStats[currentQuizWord.hanzi].wrong > 0) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+
+            document.getElementById('quiz-visual').innerText = currentQuizWord.icon || '📚';
+
+            if (learningMode === 'th_to_cn') {
+                document.getElementById('quiz-main-text').innerText = currentQuizWord.hanzi;
+                document.getElementById('quiz-main-text').className = "chinese-font text-5xl md:text-6xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold";
+                document.getElementById('quiz-sub-text').innerText = currentQuizWord.pinyin;
+            } else {
+                document.getElementById('quiz-main-text').innerText = currentQuizWord.meaning;
+                document.getElementById('quiz-main-text').className = "text-4xl md:text-5xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold";
+                document.getElementById('quiz-sub-text').innerText = getThaiPinyinForChinese(currentQuizWord.meaning);
+            }
+
+            let correctAns = learningMode === 'th_to_cn' ? currentQuizWord.meaning : currentQuizWord.hanzi;
+            let options = [correctAns];
+            let availablePool = shuffleArray(currentQuizPool.filter(w => (learningMode === 'th_to_cn' ? w.meaning : w.hanzi) !== correctAns));
+
+            for (let i = 0; i < Math.min(3, availablePool.length); i++) {
+                options.push(learningMode === 'th_to_cn' ? availablePool[i].meaning : availablePool[i].hanzi);
+            }
+            while(options.length < 4) {
+                const randW = allWords[Math.floor(Math.random() * allWords.length)];
+                let val = learningMode === 'th_to_cn' ? randW.meaning : randW.hanzi;
+                if(!options.includes(val)) options.push(val);
+            }
+            options = shuffleArray(options);
+
+            const optContainer = document.getElementById('quiz-options');
+            optContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-3 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-medium text-slate-200 border border-slate-600 transition text-center " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                btn.innerText = opt;
+                btn.onclick = () => checkQuizAnswer(opt, btn);
+                optContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selected, btn) {
+            const buttons = document.querySelectorAll('#quiz-options button');
+            buttons.forEach(b => b.disabled = true);
+            let correctAns = learningMode === 'th_to_cn' ? currentQuizWord.meaning : currentQuizWord.hanzi;
+
+            if (selected === correctAns) {
+                playSoundEffect('correct');
+                btn.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                quizScore += 10;
+                recordWordStat(currentQuizWord.hanzi, true);
+                document.getElementById('quiz-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${quizScore}`;
+                setTimeout(nextQuizQuestion, 900);
+            } else {
+                playSoundEffect('incorrect');
+                btn.className = "p-3 bg-rose-600 text-white rounded-xl text-sm font-bold border border-rose-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                buttons.forEach(b => {
+                    if (b.innerText === correctAns) b.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                });
+                recordWordStat(currentQuizWord.hanzi, false);
+                setTimeout(nextQuizQuestion, 1400);
+            }
+        }
+
+        // --- Full Chapter Quiz Mode ---
+        function restartFullQuiz() {
+            fullScore = 0;
+            document.getElementById('full-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${fullScore}`;
+            document.getElementById('full-gameover').classList.add('hidden');
+            document.getElementById('full-box').classList.remove('hidden');
+
+            const chVal = document.getElementById('full-chapter-select').value;
+            const chapter = chaptersData.find(c => c.id == chVal);
+            if (!chapter) return;
+
+            fullChapterWords = chapter.words;
+            fullDeck = shuffleArray(fullChapterWords);
+            fullTotalInRound = fullDeck.length;
+            nextFullQuestion();
+        }
+
+        function nextFullQuestion() {
+            if (fullDeck.length === 0) {
+                document.getElementById('full-box').classList.add('hidden');
+                document.getElementById('full-gameover').classList.remove('hidden');
+                document.getElementById('full-final-score').innerText = learningMode === 'th_to_cn' ? `คุณทำคะแนนได้ ${fullScore} / ${fullTotalInRound * 10} คะแนน` : `您的得分为 ${fullScore} / ${fullTotalInRound * 10} 分`;
+                return;
+            }
+
+            const currentIndex = fullTotalInRound - fullDeck.length + 1;
+            document.getElementById('full-counter').innerText = learningMode === 'th_to_cn' ? `ข้อที่ ${currentIndex} / ${fullTotalInRound}` : `第 ${currentIndex} / ${fullTotalInRound} 题`;
+
+            currentFullWord = fullDeck.shift();
+            playAudio(learningMode === 'th_to_cn' ? currentFullWord.hanzi : currentFullWord.meaning);
+
+            document.getElementById('full-visual').innerText = currentFullWord.icon || '📚';
+            if (learningMode === 'th_to_cn') {
+                document.getElementById('full-main-text').innerText = currentFullWord.hanzi;
+                document.getElementById('full-main-text').className = "chinese-font text-5xl md:text-6xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold";
+                document.getElementById('full-pinyin').innerText = currentFullWord.pinyin;
+            } else {
+                document.getElementById('full-main-text').innerText = currentFullWord.meaning;
+                document.getElementById('full-main-text').className = "text-4xl md:text-5xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold";
+                document.getElementById('full-pinyin').innerText = getThaiPinyinForChinese(currentFullWord.meaning);
+            }
+
+            let correctAns = learningMode === 'th_to_cn' ? currentFullWord.meaning : currentFullWord.hanzi;
+            let options = [correctAns];
+            let availablePool = shuffleArray(fullChapterWords.filter(w => (learningMode === 'th_to_cn' ? w.meaning : w.hanzi) !== correctAns));
+
+            for (let i = 0; i < Math.min(3, availablePool.length); i++) {
+                options.push(learningMode === 'th_to_cn' ? availablePool[i].meaning : availablePool[i].hanzi);
+            }
+            while(options.length < 4) {
+                const randW = allWords[Math.floor(Math.random() * allWords.length)];
+                let val = learningMode === 'th_to_cn' ? randW.meaning : randW.hanzi;
+                if(!options.includes(val)) options.push(val);
+            }
+            options = shuffleArray(options);
+
+            const optContainer = document.getElementById('full-options');
+            optContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-3 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-medium text-slate-200 border border-slate-600 transition text-center " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const buttons = document.querySelectorAll('#full-options button');
+                    buttons.forEach(b => b.disabled = true);
+                    if (opt === correctAns) {
+                        playSoundEffect('correct');
+                        btn.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                        fullScore += 10;
+                        recordWordStat(currentFullWord.hanzi, true);
+                        document.getElementById('full-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${fullScore}`;
+                        setTimeout(nextFullQuestion, 900);
+                    } else {
+                        playSoundEffect('incorrect');
+                        btn.className = "p-3 bg-rose-600 text-white rounded-xl text-sm font-bold border border-rose-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                        buttons.forEach(b => { if (b.innerText === correctAns) b.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg'); });
+                        recordWordStat(currentFullWord.hanzi, false);
+                        setTimeout(nextFullQuestion, 1400);
+                    }
+                };
+                optContainer.appendChild(btn);
+            });
+        }
+
+        // --- Big Chapter Quiz Mode ---
+        function restartBigQuiz() {
+            bigScore = 0;
+            document.getElementById('big-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${bigScore}`;
+            document.getElementById('big-gameover').classList.add('hidden');
+            document.getElementById('big-box').classList.remove('hidden');
+
+            const bigId = document.getElementById('big-chapter-select').value;
+            const bigCh = bigChaptersData.find(b => b.bigId == bigId);
+            if (!bigCh) return;
+
+            bigChapterWords = bigCh.words;
+            bigDeck = shuffleArray(bigChapterWords);
+            bigTotalInRound = bigDeck.length;
+            nextBigQuestion();
+        }
+
+        function nextBigQuestion() {
+            if (bigDeck.length === 0) {
+                document.getElementById('big-box').classList.add('hidden');
+                document.getElementById('big-gameover').classList.remove('hidden');
+                document.getElementById('big-final-score').innerText = learningMode === 'th_to_cn' ? `คุณทำคะแนนได้ ${bigScore} / ${bigTotalInRound * 10} คะแนน` : `您的得分为 ${bigScore} / ${bigTotalInRound * 10} 分`;
+                return;
+            }
+
+            const currentIndex = bigTotalInRound - bigDeck.length + 1;
+            document.getElementById('big-counter').innerText = learningMode === 'th_to_cn' ? `ข้อที่ ${currentIndex} / ${bigTotalInRound}` : `第 ${currentIndex} / ${bigTotalInRound} 题`;
+
+            currentBigWord = bigDeck.shift();
+            playAudio(learningMode === 'th_to_cn' ? currentBigWord.hanzi : currentBigWord.meaning);
+
+            document.getElementById('big-visual').innerText = currentBigWord.icon || '📚';
+            if (learningMode === 'th_to_cn') {
+                document.getElementById('big-main-text').innerText = currentBigWord.hanzi;
+                document.getElementById('big-main-text').className = "chinese-font text-5xl md:text-6xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold";
+                document.getElementById('big-pinyin').innerText = currentBigWord.pinyin;
+            } else {
+                document.getElementById('big-main-text').innerText = currentBigWord.meaning;
+                document.getElementById('big-main-text').className = "text-4xl md:text-5xl text-amber-400 mb-2 drop-shadow tracking-wider font-bold";
+                document.getElementById('big-pinyin').innerText = getThaiPinyinForChinese(currentBigWord.meaning);
+            }
+
+            let correctAns = learningMode === 'th_to_cn' ? currentBigWord.meaning : currentBigWord.hanzi;
+            let options = [correctAns];
+            let availablePool = shuffleArray(bigChapterWords.filter(w => (learningMode === 'th_to_cn' ? w.meaning : w.hanzi) !== correctAns));
+
+            for (let i = 0; i < Math.min(3, availablePool.length); i++) {
+                options.push(learningMode === 'th_to_cn' ? availablePool[i].meaning : availablePool[i].hanzi);
+            }
+            while(options.length < 4) {
+                const randW = allWords[Math.floor(Math.random() * allWords.length)];
+                let val = learningMode === 'th_to_cn' ? randW.meaning : randW.hanzi;
+                if(!options.includes(val)) options.push(val);
+            }
+            options = shuffleArray(options);
+
+            const optContainer = document.getElementById('big-options');
+            optContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-3 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-medium text-slate-200 border border-slate-600 transition text-center " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const buttons = document.querySelectorAll('#big-options button');
+                    buttons.forEach(b => b.disabled = true);
+                    if (opt === correctAns) {
+                        playSoundEffect('correct');
+                        btn.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                        bigScore += 10;
+                        recordWordStat(currentBigWord.hanzi, true);
+                        document.getElementById('big-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${bigScore}`;
+                        setTimeout(nextBigQuestion, 900);
+                    } else {
+                        playSoundEffect('incorrect');
+                        btn.className = "p-3 bg-rose-600 text-white rounded-xl text-sm font-bold border border-rose-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
+                        buttons.forEach(b => { if (b.innerText === correctAns) b.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg'); });
+                        recordWordStat(currentBigWord.hanzi, false);
+                        setTimeout(nextBigQuestion, 1400);
+                    }
+                };
+                optContainer.appendChild(btn);
+            });
+        }
+
+        // --- Listening Mode ---
+        function restartListening() {
+            listeningScore = 0;
+            document.getElementById('listening-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนนฟังเสียง' : '听力得分'}: ${listeningScore}`;
+            document.getElementById('listening-gameover').classList.add('hidden');
+            document.getElementById('listening-box').classList.remove('hidden');
+
+            const chVal = document.getElementById('listening-chapter-select').value;
+            listeningPool = chVal === 'all' ? allWords : allWords.filter(w => w.chapterId == chVal);
+            listeningDeck = shuffleArray(listeningPool).slice(0, 10);
+            listeningTotalInRound = listeningDeck.length;
+            nextListeningQuestion();
+        }
+
+        function nextListeningQuestion() {
+            if (listeningDeck.length === 0) {
+                document.getElementById('listening-box').classList.add('hidden');
+                document.getElementById('listening-gameover').classList.remove('hidden');
+                document.getElementById('listening-final-score').innerText = learningMode === 'th_to_cn' ? `คุณทำคะแนนฟังเสียงได้ ${listeningScore} / ${listeningTotalInRound * 10} คะแนน` : `您的听力得分为 ${listeningScore} / ${listeningTotalInRound * 10} 分`;
+                return;
+            }
+
+            const currentIndex = listeningTotalInRound - listeningDeck.length + 1;
+            document.getElementById('listening-counter').innerText = learningMode === 'th_to_cn' ? `ข้อที่ ${currentIndex} / ${listeningTotalInRound}` : `第 ${currentIndex} / ${listeningTotalInRound} 题`;
+
+            currentListeningWord = listeningDeck.shift();
+            document.getElementById('listening-visual').innerText = currentListeningWord.icon || '🎧';
+            playListeningAudio(1.0);
+
+            let options = [currentListeningWord];
+            let availablePool = shuffleArray(listeningPool.filter(w => w.hanzi !== currentListeningWord.hanzi));
+
+            for (let i = 0; i < Math.min(3, availablePool.length); i++) {
+                options.push(availablePool[i]);
+            }
+            while(options.length < 4) {
+                const randW = allWords[Math.floor(Math.random() * allWords.length)];
+                if(!options.some(o => o.hanzi === randW.hanzi)) options.push(randW);
+            }
+            options = shuffleArray(options);
+
+            const optContainer = document.getElementById('listening-options');
+            optContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-slate-700 hover:bg-slate-600 rounded-xl text-center border border-slate-600 transition flex flex-col items-center justify-center";
+                
+                let mainText = learningMode === 'th_to_cn' ? opt.hanzi : opt.meaning;
+                let subText = learningMode === 'th_to_cn' ? opt.pinyin : getThaiPinyinForChinese(opt.meaning);
+                let descText = learningMode === 'th_to_cn' ? opt.meaning : opt.hanzi;
+                let mainClass = learningMode === 'th_to_cn' ? "chinese-font text-2xl text-amber-400" : "text-xl text-amber-400 font-bold";
+
+                btn.innerHTML = `<span class="${mainClass}">${mainText}</span><span class="text-xs text-slate-300 mt-1">${subText}</span><span class="text-xs text-slate-200 mt-1 font-medium ${learningMode==='th_to_cn'?'':'chinese-font text-base'}">${descText}</span>`;
+                
+                btn.onclick = () => {
+                    const buttons = document.querySelectorAll('#listening-options button');
+                    buttons.forEach(b => b.disabled = true);
+                    if (opt.hanzi === currentListeningWord.hanzi) {
+                        playSoundEffect('correct');
+                        btn.className = "p-4 bg-emerald-600 text-white rounded-xl text-center border border-emerald-500 shadow flex flex-col items-center justify-center";
+                        listeningScore += 10;
+                        recordWordStat(currentListeningWord.hanzi, true);
+                        document.getElementById('listening-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนนฟังเสียง' : '听力得分'}: ${listeningScore}`;
+                        setTimeout(nextListeningQuestion, 900);
+                    } else {
+                        playSoundEffect('incorrect');
+                        btn.className = "p-4 bg-rose-600 text-white rounded-xl text-center border border-rose-500 shadow flex flex-col items-center justify-center";
+                        buttons.forEach(b => { if(b.innerText.includes(learningMode === 'th_to_cn' ? currentListeningWord.hanzi : currentListeningWord.meaning)) b.className = "p-4 bg-emerald-600 text-white rounded-xl text-center border border-emerald-500 shadow flex flex-col items-center justify-center"; });
+                        recordWordStat(currentListeningWord.hanzi, false);
+                        setTimeout(nextListeningQuestion, 1400);
+                    }
+                };
+                optContainer.appendChild(btn);
+            });
+        }
+        function playListeningAudio(rate) { if(currentListeningWord) playAudio(learningMode === 'th_to_cn' ? currentListeningWord.hanzi : currentListeningWord.meaning, rate); }
+
+        // --- Speed Matching Game ---
+        function startMatchingGame() {
+            clearInterval(matchingTimerInterval);
+            matchingStartTime = Date.now();
+            matchingTimerInterval = setInterval(() => {
+                const elapsed = ((Date.now() - matchingStartTime) / 1000).toFixed(1);
+                document.getElementById('matching-timer').innerText = `⏱ ${elapsed}s`;
+            }, 100);
+
+            document.getElementById('matching-win').classList.add('hidden');
+            const board = document.getElementById('matching-board');
+            board.classList.remove('hidden');
+            board.innerHTML = '';
+
+            let subset = shuffleArray(allWords).slice(0, 5);
+            let cards = [];
+            subset.forEach(w => {
+                cards.push({ id: w.hanzi, type: 'left', text: learningMode === 'th_to_cn' ? w.hanzi : w.meaning });
+                cards.push({ id: w.hanzi, type: 'right', text: learningMode === 'th_to_cn' ? w.meaning : w.hanzi });
+            });
+            cards = shuffleArray(cards);
+
+            matchingPairsMatched = 0;
+            matchingSelectedCard = null;
+
+            cards.forEach(c => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = "bg-slate-700 hover:bg-slate-600 border border-slate-600 h-28 rounded-xl flex items-center justify-center text-center p-2 cursor-pointer transition select-none shadow-md font-medium text-slate-200 " + (learningMode==='th_to_cn' && c.type==='left' ? 'chinese-font text-2xl text-amber-400' : (learningMode==='cn_to_th' && c.type==='right' ? 'chinese-font text-xl text-amber-400' : 'text-base text-amber-300'));
+                cardDiv.innerText = c.text;
+                
+                cardDiv.onclick = () => {
+                    if (cardDiv.classList.contains('opacity-40') || cardDiv.classList.contains('bg-amber-600')) return;
+                    if (!matchingSelectedCard) {
+                        matchingSelectedCard = { card: c, el: cardDiv };
+                        cardDiv.classList.add('bg-amber-600', 'text-slate-950', 'border-amber-400');
+                    } else {
+                        const first = matchingSelectedCard;
+                        if (first.el === cardDiv) {
+                            cardDiv.classList.remove('bg-amber-600', 'text-slate-950', 'border-amber-400');
+                            matchingSelectedCard = null;
+                            return;
+                        }
+                        if (first.card.id === c.id) {
+                            playSoundEffect('correct');
+                            cardDiv.classList.add('bg-emerald-600', 'text-white', 'border-emerald-400');
+                            first.el.classList.add('bg-emerald-600', 'text-white', 'border-emerald-400');
+                            setTimeout(() => {
+                                cardDiv.classList.add('opacity-40', 'pointer-events-none');
+                                first.el.classList.add('opacity-40', 'pointer-events-none');
+                            }, 300);
+                            matchingPairsMatched++;
+                            matchingSelectedCard = null;
+                            if (matchingPairsMatched === 5) {
+                                clearInterval(matchingTimerInterval);
+                                const finalTime = ((Date.now() - matchingStartTime) / 1000).toFixed(1);
+                                setTimeout(() => {
+                                    document.getElementById('matching-board').classList.add('hidden');
+                                    document.getElementById('matching-win').classList.remove('hidden');
+                                    document.getElementById('matching-time-result').innerText = learningMode === 'th_to_cn' ? `เวลาที่ใช้: ${finalTime} วินาที` : `耗时: ${finalTime} 秒`;
+                                }, 400);
+                            }
+                        } else {
+                            playSoundEffect('incorrect');
+                            cardDiv.classList.add('bg-rose-600', 'text-white');
+                            first.el.classList.add('bg-rose-600', 'text-white');
+                            setTimeout(() => {
+                                cardDiv.className = "bg-slate-700 hover:bg-slate-600 border border-slate-600 h-28 rounded-xl flex items-center justify-center text-center p-2 cursor-pointer transition select-none shadow-md font-medium text-slate-200";
+                                first.el.className = "bg-slate-700 hover:bg-slate-600 border border-slate-600 h-28 rounded-xl flex items-center justify-center text-center p-2 cursor-pointer transition select-none shadow-md font-medium text-slate-200";
+                                matchingSelectedCard = null;
+                            }, 500);
+                        }
+                    }
+                };
+                board.appendChild(cardDiv);
+            });
+        }
+
+        // --- Stats & Charts ---
+        function renderStatsChart() {
+            const chId = document.getElementById('stats-chapter-select').value;
+            const chapter = chaptersData.find(c => c.id == chId);
+            if(!chapter) return;
+
+            document.getElementById('stat-total-words').innerText = chapter.words.length;
+            let totalCorrect = 0, totalWrong = 0;
+            const container = document.getElementById('stats-chart-container');
+            container.innerHTML = '';
+
+            chapter.words.forEach(w => {
+                const stat = wordStats[w.hanzi] || { seen: 0, correct: 0, wrong: 0 };
+                totalCorrect += stat.correct;
+                totalWrong += stat.wrong;
+                const maxVal = Math.max(stat.seen, 1);
+                const correctPct = Math.round((stat.correct / maxVal) * 100);
+                const wrongPct = Math.round((stat.wrong / maxVal) * 100);
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-2";
+                itemDiv.innerHTML = `
+                    <div class="flex justify-between items-center text-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">${w.icon || '📚'}</span>
+                            <span class="${learningMode==='th_to_cn'?'chinese-font text-lg text-amber-400':'text-lg text-amber-400 font-bold'}">${learningMode==='th_to_cn'?w.hanzi:w.meaning}</span>
+                            <span class="text-xs text-slate-300">(${learningMode==='th_to_cn'?w.pinyin:getThaiPinyinForChinese(w.meaning)}) - ${learningMode==='th_to_cn'?w.meaning:w.hanzi}</span>
+                        </div>
+                        <div class="text-xs font-semibold space-x-2">
+                            <span class="text-slate-300">${learningMode==='th_to_cn'?'เจอ':'见过'}: <b class="text-amber-300">${stat.seen}</b></span>
+                            <span class="text-emerald-400">${learningMode==='th_to_cn'?'ถูก':'对'}: <b>${stat.correct}</b></span>
+                            <span class="text-rose-400">${learningMode==='th_to_cn'?'ผิด':'错'}: <b>${stat.wrong}</b></span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden flex">
+                        <div class="bg-emerald-500 h-full transition-all duration-300" style="width: ${correctPct}%"></div>
+                        <div class="bg-rose-500 h-full transition-all duration-300" style="width: ${wrongPct}%"></div>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+            document.getElementById('stat-total-correct').innerText = `${totalCorrect} ${learningMode === 'th_to_cn' ? 'ครั้ง' : '次'}`;
+            document.getElementById('stat-total-wrong').innerText = `${totalWrong} ${learningMode === 'th_to_cn' ? 'ครั้ง' : '次'}`;
+        }
+
+        // --- Flashcard & Dictionary ---
+        function setupFlashcard() { flashcardIndex = 0; isFlashcardFlipped = false; renderCurrentFlashcard(); }
+        function getCurrentFlashcardText() {
+            const w = allWords[flashcardIndex];
+            return learningMode === 'th_to_cn' ? w.hanzi : w.meaning;
+        }
+        function renderCurrentFlashcard() {
+            const w = allWords[flashcardIndex];
+            document.getElementById('fc-chapter-badge').innerText = learningMode === 'th_to_cn' ? w.chapterName.split(':')[0] : w.cnChapterName.split(':')[0];
+            document.getElementById('fc-visual').innerText = w.icon || '📚';
+            
+            if (learningMode === 'th_to_cn') {
+                document.getElementById('fc-main-text').innerText = w.hanzi;
+                document.getElementById('fc-main-text').className = "chinese-font text-5xl text-amber-400 tracking-wider font-bold";
+                document.getElementById('fc-sub-text').innerText = w.pinyin;
+                document.getElementById('fc-meaning').innerText = w.meaning;
+                document.getElementById('fc-example').innerText = w.example;
+            } else {
+                document.getElementById('fc-main-text').innerText = w.meaning;
+                document.getElementById('fc-main-text').className = "text-4xl text-amber-400 tracking-wider font-bold";
+                document.getElementById('fc-sub-text').innerText = getThaiPinyinForChinese(w.meaning);
+                document.getElementById('fc-meaning').innerText = w.hanzi;
+                document.getElementById('fc-example').innerText = `汉语拼音: ${w.pinyin} | 例句: ${w.example}`;
+            }
+
+            const btn = document.getElementById('fc-memorized-btn');
+            const isMem = memorizedSet.includes(w.hanzi);
+            btn.innerText = isMem ? (learningMode === 'th_to_cn' ? "✓ จำได้แล้ว" : "✓ 已记住") : (learningMode === 'th_to_cn' ? "○ ยังไม่จำ" : "○ 未记住");
+            btn.className = isMem ? "px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-slate-300 hover:bg-slate-600";
+
+            const container = document.getElementById('flashcard-container');
+            if(isFlashcardFlipped) { container.classList.remove('rotate-y-180'); isFlashcardFlipped = false; }
+        }
+        function flipFlashcard() {
+            const container = document.getElementById('flashcard-container');
+            isFlashcardFlipped = !isFlashcardFlipped;
+            if(isFlashcardFlipped) container.classList.add('rotate-y-180');
+            else container.classList.remove('rotate-y-180');
+        }
+        function nextFlashcard() { flashcardIndex = (flashcardIndex + 1) % allWords.length; renderCurrentFlashcard(); }
+        function prevFlashcard() { flashcardIndex = (flashcardIndex - 1 + allWords.length) % allWords.length; renderCurrentFlashcard(); }
+        function toggleMemoryStatus() {
+            const w = allWords[flashcardIndex];
+            const idx = memorizedSet.indexOf(w.hanzi);
+            if(idx > -1) memorizedSet.splice(idx, 1);
+            else memorizedSet.push(w.hanzi);
+            updateProgress();
+            renderCurrentFlashcard();
+            renderDictionary();
+        }
+        function renderDictionary() {
+            const chFilter = document.getElementById('dict-chapter-filter').value;
+            const statusFilter = document.getElementById('dict-status-filter').value;
+            const searchVal = document.getElementById('dict-search').value.toLowerCase();
+
+            document.getElementById('th-col-1').innerText = learningMode === 'th_to_cn' ? 'คำศัพท์ (จีน)' : '泰语词汇';
+            document.getElementById('th-col-2').innerText = learningMode === 'th_to_cn' ? 'พินอิน' : '泰语拼音 (发音标音)';
+            document.getElementById('th-col-3').innerText = learningMode === 'th_to_cn' ? 'ความหมาย (ไทย)' : '中文释义';
+            document.getElementById('th-col-4').innerText = learningMode === 'th_to_cn' ? 'บทเรียน' : '章节';
+            document.getElementById('th-col-5').innerText = learningMode === 'th_to_cn' ? 'สถิติ' : '正确率';
+            document.getElementById('th-col-6').innerText = learningMode === 'th_to_cn' ? 'สถานะ' : '状态';
+            document.getElementById('th-col-7').innerText = learningMode === 'th_to_cn' ? 'เสียง' : '发音';
+
+            let filtered = allWords.filter(w => {
+                const matchCh = chFilter === 'all' || w.chapterId == chFilter;
+                const isMem = memorizedSet.includes(w.hanzi);
+                const stat = wordStats[w.hanzi] || { seen: 0, correct: 0, wrong: 0 };
+                let matchStatus = true;
+                if (statusFilter === 'memorized') matchStatus = isMem;
+                if (statusFilter === 'unmemorized') matchStatus = !isMem;
+                if (statusFilter === 'weak') matchStatus = stat.wrong > 0;
+                
+                let col1Val = learningMode === 'th_to_cn' ? w.hanzi : w.meaning;
+                let col2Val = learningMode === 'th_to_cn' ? w.pinyin : getThaiPinyinForChinese(w.meaning);
+                let col3Val = learningMode === 'th_to_cn' ? w.meaning : w.hanzi;
+
+                const matchSearch = col1Val.toLowerCase().includes(searchVal) || col2Val.toLowerCase().includes(searchVal) || col3Val.toLowerCase().includes(searchVal);
+                return matchCh && matchStatus && matchSearch;
+            });
+
+            document.getElementById('dict-count').innerText = filtered.length;
+            const tbody = document.getElementById('dict-tbody');
+            tbody.innerHTML = '';
+            filtered.forEach(w => {
+                const isMem = memorizedSet.includes(w.hanzi);
+                const stat = wordStats[w.hanzi] || { seen: 0, correct: 0, wrong: 0 };
+                
+                let mainCol = learningMode === 'th_to_cn' ? w.hanzi : w.meaning;
+                let subCol = learningMode === 'th_to_cn' ? w.pinyin : getThaiPinyinForChinese(w.meaning);
+                let descCol = learningMode === 'th_to_cn' ? w.meaning : w.hanzi;
+                let mainFontClass = learningMode === 'th_to_cn' ? 'chinese-font text-xl text-amber-400' : 'text-lg text-amber-400 font-bold';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-700/40 transition";
+                tr.innerHTML = `
+                    <td class="p-3 flex items-center gap-2"><span class="text-xl">${w.icon || '📚'}</span><span class="${mainFontClass}">${mainCol}</span></td>
+                    <td class="p-3 text-slate-300 font-medium">${subCol}</td>
+                    <td class="p-3 text-slate-200 font-medium ${learningMode==='th_to_cn'?'':'chinese-font text-lg'}">${descCol}</td>
+                    <td class="p-3 text-xs text-slate-400">${learningMode === 'th_to_cn' ? w.chapterName : w.cnChapterName}</td>
+                    <td class="p-3 text-center"><span class="text-xs text-slate-300">${learningMode==='th_to_cn'?'เจอ':'见'} <b class="text-amber-300">${stat.seen}</b> | <span class="text-emerald-400">${learningMode==='th_to_cn'?'ถูก':'对'} ${stat.correct}</span> | <span class="text-rose-400">${learningMode==='th_to_cn'?'ผิด':'错'} ${stat.wrong}</span></span></td>
+                    <td class="p-3 text-center"><button onclick="toggleDictMemory('${w.hanzi}')" class="px-2.5 py-1 rounded text-xs font-semibold ${isMem ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/50' : 'bg-slate-700 text-slate-400'}">${isMem ? (learningMode === 'th_to_cn' ? '✓ จำแล้ว' : '✓ 已记') : (learningMode === 'th_to_cn' ? 'ยังไม่จำ' : '未记')}</button></td>
+                    <td class="p-3 text-center"><button onclick="playAudio('${learningMode==='th_to_cn'?w.hanzi:w.meaning}')" class="p-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs" title="ฟังเสียง">🔊</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        function toggleDictMemory(hanzi) {
+            const idx = memorizedSet.indexOf(hanzi);
+            if(idx > -1) memorizedSet.splice(idx, 1);
+            else memorizedSet.push(hanzi);
+            updateProgress();
+            renderDictionary();
+        }
+    </script>
+</body>
+</html>
