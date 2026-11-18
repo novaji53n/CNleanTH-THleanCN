@@ -1,15 +1,11 @@
 {
-  "name": "CNleanTH-THleanCN",
-  "short_name": "HSK Master",
-  "start_url": "/",
+  "background_color": "#ffffff",
+  "dir": "ltr",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
-  "icons": [
-    {
-      "src": "https://img.wonderplugin.com/hsk-thai-icon-v5-exchange.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "name": "CNleanTH-THleanCN",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "HSK master",
+  "start_url": "/",
+  "theme_color": "#ffffff"
 }
