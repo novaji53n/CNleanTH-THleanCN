@@ -2,34 +2,93 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="html-title">HSK & Thai Master - 30 Chapters Complete</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Prompt', sans-serif; }
+        body { font-family: 'Prompt', sans-serif; -webkit-tap-highlight-color: transparent; }
         .chinese-font { font-family: 'Noto Sans SC', sans-serif; font-weight: 600; }
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
+
+        /* สไตล์โหมดโทรศัพท์มือถือ (Mobile View) */
+        body.mobile-view main {
+            max-width: 480px;
+            padding: 10px 12px 24px 12px;
+        }
+        body.mobile-view header .header-inner {
+            padding: 8px 12px;
+            gap: 8px;
+        }
+        body.mobile-view #header-title {
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+        body.mobile-view #header-desc {
+            display: none;
+        }
+        body.mobile-view nav {
+            justify-content: flex-start;
+            padding: 6px 10px;
+            gap: 6px;
+        }
+        body.mobile-view .tab-btn {
+            padding: 6px 11px;
+            font-size: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        body.mobile-view #quiz-main-text,
+        body.mobile-view #full-main-text,
+        body.mobile-view #big-main-text {
+            font-size: 2.5rem;
+        }
+        body.mobile-view #quiz-options,
+        body.mobile-view #full-options,
+        body.mobile-view #big-options,
+        body.mobile-view #listening-options {
+            grid-template-columns: 1fr;
+        }
+        body.mobile-view #matching-board {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+        body.mobile-view #matching-board > div {
+            height: 68px;
+            font-size: 14px;
+        }
+        body.mobile-view #flashcard-container {
+            height: 290px;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
 
     <!-- Header & Progress Bar -->
     <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-            <div class="flex items-center space-x-3">
-                <span class="text-3xl" id="header-icon">🏮</span>
-                <div>
-                    <h1 id="header-title" class="text-xl font-bold bg-gradient-to-r from-amber-400 to-rose-400 bg-clip-text text-transparent">HSK Unified Master (ไทย ➔ จีน)</h1>
-                    <p id="header-desc" class="text-xs text-slate-400">ระบบ 30 บทสมบูรณ์ (1,350+ คำศัพท์ & พินอินเทียบเสียงภาษาไทย)</p>
+        <div class="header-inner max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center justify-between w-full md:w-auto gap-2">
+                <div class="flex items-center space-x-2.5">
+                    <span class="text-2xl md:text-3xl" id="header-icon">🏮</span>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 id="header-title" class="text-xl font-bold bg-gradient-to-r from-amber-400 to-rose-400 bg-clip-text text-transparent">HSK Unified Master (ไทย ➔ จีน)</h1>
+                            <span id="device-badge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold bg-emerald-950 text-emerald-300 border border-emerald-700/60">กำลังตรวจสอบ...</span>
+                        </div>
+                        <p id="header-desc" class="text-xs text-slate-400">ระบบ 30 บทสมบูรณ์ (1,350+ คำศัพท์ & พินอินเทียบเสียงภาษาไทย)</p>
+                    </div>
                 </div>
+                <button onclick="toggleMobileViewManual()" id="view-mode-btn" class="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-amber-300 text-xs font-bold rounded-lg border border-slate-600 transition shrink-0">
+                    📱 โหมดมือถือ
+                </button>
             </div>
+
             <!-- Mode Switcher & Progress -->
-            <div class="flex items-center gap-3 flex-wrap justify-end">
-                <button onclick="toggleAppMode()" id="mode-switch-btn" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold rounded-xl shadow transition border border-indigo-400/40 flex items-center gap-1.5">
+            <div class="flex items-center gap-2.5 flex-wrap justify-end w-full md:w-auto">
+                <button onclick="toggleAppMode()" id="mode-switch-btn" class="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold rounded-xl shadow transition border border-indigo-400/40 flex items-center gap-1.5">
                     🔄 สลับโหมด: คนจีนเรียนไทย (🇨🇳 ➔ 🇹🇭)
                 </button>
                 <div class="w-full sm:w-60 bg-slate-700/60 p-2 rounded-xl border border-slate-600">
@@ -43,6 +102,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Navigation Tabs -->
         <nav class="bg-slate-900/90 border-t border-slate-800 px-4 py-2 flex justify-center gap-2 overflow-x-auto">
             <button onclick="switchTab('quiz')" id="nav-quiz" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-amber-500 text-slate-950 transition shadow">🎯 โหมดสุ่ม 10 คำ</button>
@@ -60,7 +120,7 @@
 
         <!-- TAB 1: QUIZ MODE -->
         <section id="tab-quiz" class="space-y-6">
-            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl max-w-2xl mx-auto">
                 <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <span id="quiz-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนน: 0</span>
@@ -79,7 +139,7 @@
                 <div id="quiz-box" class="text-center space-y-6">
                     <div class="relative w-44 h-36 mx-auto rounded-2xl overflow-hidden shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
                         <div id="quiz-visual" class="text-7xl select-none transition-transform duration-300 hover:scale-110">🏮</div>
-                        <button onclick="playCurrentAudio()" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
+                        <button onclick="playCurrentAudio()" id="quiz-audio-btn" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
                             🔊 ฟังเสียง
                         </button>
                     </div>
@@ -105,7 +165,7 @@
 
         <!-- TAB 2: FULL CHAPTER QUIZ -->
         <section id="tab-fullquiz" class="hidden space-y-6">
-            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl max-w-2xl mx-auto">
                 <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <span id="full-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนน: 0</span>
@@ -123,7 +183,7 @@
                 <div id="full-box" class="text-center space-y-6">
                     <div class="relative w-44 h-36 mx-auto rounded-2xl overflow-hidden shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
                         <div id="full-visual" class="text-7xl select-none transition-transform duration-300 hover:scale-110">🏮</div>
-                        <button onclick="playCurrentFullAudio()" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
+                        <button onclick="playCurrentFullAudio()" id="full-audio-btn" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
                             🔊 ฟังเสียง
                         </button>
                     </div>
@@ -149,7 +209,7 @@
 
         <!-- TAB 3: BIG CHAPTER QUIZ -->
         <section id="tab-bigquiz" class="hidden space-y-6">
-            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl max-w-2xl mx-auto">
                 <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <span id="big-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนน: 0</span>
@@ -167,7 +227,7 @@
                 <div id="big-box" class="text-center space-y-6">
                     <div class="relative w-44 h-36 mx-auto rounded-2xl overflow-hidden shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
                         <div id="big-visual" class="text-7xl select-none transition-transform duration-300 hover:scale-110">🏮</div>
-                        <button onclick="playCurrentBigAudio()" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
+                        <button onclick="playCurrentBigAudio()" id="big-audio-btn" class="absolute bottom-2 right-2 bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-full shadow transition text-xs font-bold" title="ฟังเสียง">
                             🔊 ฟังเสียง
                         </button>
                     </div>
@@ -193,7 +253,7 @@
 
         <!-- TAB 4: LISTENING MODE -->
         <section id="tab-listening" class="hidden space-y-6">
-            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto text-center space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl max-w-2xl mx-auto text-center space-y-6">
                 <div class="flex justify-between items-center flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <span id="listening-score" class="text-sm font-semibold px-3 py-1 bg-slate-700 rounded-full text-amber-300">คะแนนฟังเสียง: 0</span>
@@ -208,14 +268,14 @@
                 </div>
 
                 <div id="listening-box" class="space-y-6">
-                    <div class="py-6 space-y-3 bg-slate-900/60 rounded-xl border border-slate-700">
+                    <div class="py-6 space-y-3 bg-slate-900/60 rounded-xl border border-slate-700 px-3">
                         <div class="w-36 h-32 mx-auto rounded-2xl shadow-lg border border-slate-600 bg-gradient-to-br from-slate-800 to-slate-950 flex items-center justify-center">
                             <div id="listening-visual" class="text-6xl select-none">🎧</div>
                         </div>
-                        <p id="listening-hint" class="text-slate-400 text-sm">ฟังเสียงออกอัตโนมัติ เลือกคำตอบที่ถูกต้อง</p>
-                        <div class="flex justify-center gap-3">
+                        <p id="listening-hint" class="text-slate-400 text-sm">กดปุ่มฟังเสียง แล้วเลือกคำตอบที่ถูกต้อง</p>
+                        <div class="flex justify-center gap-3 flex-wrap">
                             <button onclick="playListeningAudio(1.0)" id="listen-btn-1" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow transition flex items-center gap-2 text-sm">
-                                🔊 ฟังเสียงซ้ำ (1.0x)
+                                🔊 ฟังเสียง (1.0x)
                             </button>
                             <button onclick="playListeningAudio(0.75)" id="listen-btn-2" class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium rounded-xl shadow transition text-sm">
                                 🐢 เสียงช้า (0.75x)
@@ -239,15 +299,15 @@
 
         <!-- TAB 5: SPEED MATCHING -->
         <section id="tab-matching" class="hidden space-y-6">
-            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-3xl mx-auto">
-                <div class="flex justify-between items-center mb-4">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl max-w-3xl mx-auto">
+                <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
                     <h2 id="matching-title" class="text-lg font-bold text-amber-400">⚡ จับคู่ไว 5 คำ (ไทย & จีน)</h2>
                     <div class="flex items-center gap-3">
                         <span id="matching-timer" class="text-sm font-bold text-amber-300 bg-slate-700 px-3 py-1 rounded-full">⏱ 0.0s</span>
                         <button id="matching-start-btn" onclick="startMatchingGame()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-lg shadow transition">เริ่มเกมใหม่</button>
                     </div>
                 </div>
-                <div id="matching-board" class="grid grid-cols-2 md:grid-cols-5 gap-3 min-h-[300px] items-center"></div>
+                <div id="matching-board" class="grid grid-cols-2 md:grid-cols-5 gap-3 min-h-[240px] items-center"></div>
                 <div id="matching-win" class="hidden text-center py-10 space-y-3">
                     <div class="text-5xl">🎉</div>
                     <h3 id="matching-win-title" class="text-xl font-bold text-emerald-400">ยอดเยี่ยม! จับคู่สำเร็จแล้ว</h3>
@@ -259,7 +319,7 @@
 
         <!-- TAB 6: STATS -->
         <section id="tab-stats" class="hidden space-y-6">
-            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl max-w-4xl mx-auto space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 md:p-6 shadow-xl max-w-4xl mx-auto space-y-6">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-700 pb-4">
                     <div>
                         <h2 id="stats-heading" class="text-xl font-bold text-amber-400">📊 กราฟสถิติการเรียนรู้รายคำ</h2>
@@ -312,10 +372,10 @@
 
             <div class="max-w-md mx-auto perspective-1000 my-4">
                 <div id="flashcard-container" onclick="flipFlashcard()" class="relative w-full h-72 rounded-2xl cursor-pointer transition-transform duration-500 transform-style-3d shadow-2xl">
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-between backface-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-5 flex flex-col items-center justify-between backface-hidden">
                         <div class="w-full flex justify-between text-xs text-slate-400">
                             <span id="fc-chapter-badge" class="bg-slate-700 px-2.5 py-1 rounded-md text-amber-300">บทที่ 1</span>
-                            <span id="fc-flip-hint">คลิกเพื่อพลิกดูความหมาย 🔄</span>
+                            <span id="fc-flip-hint">แตะเพื่อพลิกดูความหมาย 🔄</span>
                         </div>
                         <div class="text-center space-y-2">
                             <div class="w-20 h-16 mx-auto rounded-xl shadow border border-slate-600 bg-slate-950 flex items-center justify-center">
@@ -328,7 +388,7 @@
                             🔊 ฟังเสียง
                         </button>
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between backface-hidden rotate-y-180">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl p-5 flex flex-col justify-between backface-hidden rotate-y-180">
                         <div id="fc-back-title" class="text-xs text-amber-400 font-semibold">ความหมายและตัวอย่างประโยค</div>
                         <div class="space-y-3 text-center">
                             <div id="fc-meaning" class="text-2xl font-bold text-white">--</div>
@@ -375,10 +435,122 @@
 
     <!-- Script Data & Logic -->
     <script>
-        // ระบบพินอินเทียบเสียงภาษาไทยแท้ (Chinese Pinyin Phonetics สำหรับคนจีนอ่านออกเสียงภาษาไทยได้ทันทีทุกคำ!)
+        let isMobileViewActive = false;
+        let audioUnlocked = false;
+        let sharedAudioCtx = null;
+        let cachedVoices = [];
+
+        function loadSpeechVoices() {
+            if ('speechSynthesis' in window) {
+                cachedVoices = window.speechSynthesis.getVoices() || [];
+            }
+        }
+
+        if ('speechSynthesis' in window) {
+            loadSpeechVoices();
+            window.speechSynthesis.onvoiceschanged = loadSpeechVoices;
+        }
+
+        function unlockMobileAudio() {
+            try {
+                if (!sharedAudioCtx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) sharedAudioCtx = new AudioCtx();
+                }
+                if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+                    sharedAudioCtx.resume();
+                }
+                audioUnlocked = true;
+            } catch (e) {}
+        }
+
+        document.addEventListener('touchstart', unlockMobileAudio, { passive: true });
+        document.addEventListener('click', unlockMobileAudio, { passive: true });
+
+        function detectMobileDevice() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+            const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+            return mobileRegex.test(ua) || window.innerWidth <= 768;
+        }
+
+        function syncUILanguage() {
+            const isCnToTh = learningMode === 'cn_to_th';
+
+            document.getElementById('header-icon').innerText = isCnToTh ? '🐼' : '🏮';
+            document.getElementById('header-title').innerText = isCnToTh
+                ? 'Thai Chinese Master (中国人学泰语)'
+                : 'HSK Unified Master (ไทย ➔ จีน)';
+            document.getElementById('header-desc').innerText = isCnToTh
+                ? '专为中国人设计的泰语学习系统（附汉语拼音标音，中国人可直接拼读泰语）'
+                : 'ระบบ 30 บทสมบูรณ์ (1,350+ คำศัพท์ & พินอินเทียบเสียงภาษาไทย)';
+            document.getElementById('mode-switch-btn').innerHTML = isCnToTh
+                ? '🔄 切换模式: 泰国人学汉语 (🇹🇭 ➔ 🇨🇳)'
+                : '🔄 สลับโหมด: คนจีนเรียนไทย (🇨🇳 ➔ 🇹🇭)';
+            document.getElementById('mode-switch-btn').className = isCnToTh
+                ? 'px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow transition border border-emerald-400/40 flex items-center gap-1.5'
+                : 'px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold rounded-xl shadow transition border border-indigo-400/40 flex items-center gap-1.5';
+
+            const badge = document.getElementById('device-badge');
+            const viewBtn = document.getElementById('view-mode-btn');
+            if (badge) {
+                badge.innerText = isMobileViewActive
+                    ? (isCnToTh ? '📱 手机端' : '📱 โทรศัพท์มือถือ')
+                    : (isCnToTh ? '💻 电脑端' : '💻 คอมพิวเตอร์');
+            }
+            if (viewBtn) {
+                viewBtn.innerText = isMobileViewActive
+                    ? (isCnToTh ? '💻 电脑模式' : '💻 โหมดเดสก์ท็อป')
+                    : (isCnToTh ? '📱 手机模式' : '📱 โหมดมือถือ');
+            }
+
+            document.getElementById('progress-label').innerText = isCnToTh ? '词汇记忆进度' : 'ความคืบหน้าการจำ';
+            document.getElementById('nav-quiz').innerText = isCnToTh ? '🎯 10词随机测验' : '🎯 โหมดสุ่ม 10 คำ';
+            document.getElementById('nav-fullquiz').innerText = isCnToTh ? '📝 全课逐词测试' : '📝 ทดสอบครบทุกคำ';
+            document.getElementById('nav-bigquiz').innerText = isCnToTh ? '🏆 10大章节通关' : '🏆 ทดสอบ 10 บทใหญ่';
+            document.getElementById('nav-listening').innerText = isCnToTh ? '🎧 听力训练模式' : '🎧 โหมดฟังเสียง';
+            document.getElementById('nav-matching').innerText = isCnToTh ? '⚡ 5x2 极速连连看' : '⚡ จับคู่ไว 5x2';
+            document.getElementById('nav-stats').innerText = isCnToTh ? '📊 学习数据统计' : '📊 กราฟสถิติ';
+            document.getElementById('nav-flashcard').innerText = isCnToTh ? '🃏 单词卡片 & 3D' : '🃏 คลังศัพท์ & 3D';
+
+            document.getElementById('quiz-visual-toggle').innerText = isCnToTh ? '👁 隐藏图标' : '👁 ซ่อนรูปภาพ';
+            document.getElementById('quiz-pinyin-toggle').innerText = isCnToTh ? '👁 隐藏泰语拼音' : '👁 ซ่อนพินอิน';
+            document.getElementById('full-visual-toggle').innerText = isCnToTh ? '👁 隐藏图标' : '👁 ซ่อนรูปภาพ';
+            document.getElementById('full-pinyin-toggle').innerText = isCnToTh ? '👁 隐藏泰语拼音' : '👁 ซ่อนพินอิน';
+            document.getElementById('big-visual-toggle').innerText = isCnToTh ? '👁 隐藏图标' : '👁 ซ่อนรูปภาพ';
+            document.getElementById('big-pinyin-toggle').innerText = isCnToTh ? '👁 隐藏泰语拼音' : '👁 ซ่อนพินอิน';
+            document.getElementById('listening-visual-toggle').innerText = isCnToTh ? '👁 隐藏图标' : '👁 ซ่อนรูปภาพ';
+
+            const speakerLabel = isCnToTh ? '🔊 听发音' : '🔊 ฟังเสียง';
+            const speakerTitle = isCnToTh ? '听发音' : 'ฟังเสียง';
+            ['quiz-audio-btn', 'full-audio-btn', 'big-audio-btn', 'fc-audio-btn'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerText = speakerLabel;
+                    el.title = speakerTitle;
+                }
+            });
+            const listenBtn1 = document.getElementById('listen-btn-1');
+            const listenBtn2 = document.getElementById('listen-btn-2');
+            if (listenBtn1) listenBtn1.innerText = isCnToTh ? '🔊 听发音 (1.0x)' : '🔊 ฟังเสียง (1.0x)';
+            if (listenBtn2) listenBtn2.innerText = isCnToTh ? '🐢 慢速听 (0.75x)' : '🐢 เสียงช้า (0.75x)';
+        }
+
+        function applyDeviceLayout(forceMobile) {
+            isMobileViewActive = typeof forceMobile === 'boolean' ? forceMobile : detectMobileDevice();
+            if (isMobileViewActive) {
+                document.body.classList.add('mobile-view');
+            } else {
+                document.body.classList.remove('mobile-view');
+            }
+            syncUILanguage();
+        }
+
+        function toggleMobileViewManual() {
+            applyDeviceLayout(!isMobileViewActive);
+        }
+
         function getThaiPinyinForChinese(thaiText) {
             const map = {
-                // บทที่ 1
                 "คุณ, เธอ": "kūn / tē",
                 "ฉัน, ผม": "chǎn / pǒm",
                 "เขา (ผู้ชาย)": "kǎo",
@@ -422,8 +594,6 @@
                 "เพื่อนร่วมทาง": "pùean lùam tāng",
                 "ลูกมือ, เพื่อน": "lùk mū / pùean",
                 "มวลชน": "mūan chōn",
-
-                // บทที่ 2
                 "พ่อ": "pò",
                 "แม่": "màe",
                 "ลูกชาย": "lùk chāi",
@@ -474,8 +644,6 @@
                 "แฟนสาว": "fāen sǎo",
                 "ญาติ": "yàt",
                 "มนุษยชาติ": "má nút sà yá chàt",
-
-                // บทที่ 3
                 "นี่, นี้": "nì / ní",
                 "นั่น, นั้น": "nàn / nán",
                 "ไหน": "nǎi",
@@ -518,7 +686,6 @@
             };
             if (map[thaiText]) return "泰语拼音: " + map[thaiText];
 
-            // แปลงคำในบทที่ 4-30 เป็นพินอินเทียบเสียงภาษาไทยให้อัตโนมัติทุกคำ ไม่ตกหล่นแม้แต่คำเดียว
             let autoPinyin = thaiText
                 .replace(/อาหารและเครื่องดื่ม/g, "ā hǎn láe klùeang dùm")
                 .replace(/การเดินทางและยานพาหนะ/g, "gān dēn tāng láe yān pā hà ná")
@@ -752,6 +919,7 @@
         let matchingTimerInterval = null, matchingStartTime = 0, matchingSelectedCard = null, matchingPairsMatched = 0;
 
         window.addEventListener('DOMContentLoaded', () => {
+            applyDeviceLayout();
             initChapterSelects();
             updateProgress();
             restartQuiz();
@@ -762,56 +930,13 @@
             initStatsChapterSelect();
         });
 
+        window.addEventListener('resize', () => {
+            applyDeviceLayout();
+        });
+
         function toggleAppMode() {
-            if (learningMode === 'th_to_cn') {
-                learningMode = 'cn_to_th';
-                document.getElementById('header-icon').innerText = '🐼';
-                document.getElementById('header-title').innerText = 'Thai Chinese Master (中国人学泰语)';
-                document.getElementById('header-desc').innerText = '专为中国人设计的泰语学习系统（附汉语拼音标音，中国人可直接拼读泰语）';
-                document.getElementById('mode-switch-btn').innerHTML = '🔄 切换模式: 泰国人学汉语 (🇹🇭 ➔ 🇨🇳)';
-                document.getElementById('mode-switch-btn').className = 'px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow transition border border-emerald-400/40 flex items-center gap-1.5';
-                
-                document.getElementById('progress-label').innerText = '词汇记忆进度';
-                document.getElementById('nav-quiz').innerText = '🎯 10词随机测验';
-                document.getElementById('nav-fullquiz').innerText = '📝 全课逐词测试';
-                document.getElementById('nav-bigquiz').innerText = '🏆 10大章节通关';
-                document.getElementById('nav-listening').innerText = '🎧 听力训练模式';
-                document.getElementById('nav-matching').innerText = '⚡ 5x2 极速连连看';
-                document.getElementById('nav-stats').innerText = '📊 学习数据统计';
-                document.getElementById('nav-flashcard').innerText = '🃏 单词卡片 & 3D';
-
-                document.getElementById('quiz-visual-toggle').innerText = '👁 隐藏图标';
-                document.getElementById('quiz-pinyin-toggle').innerText = '👁 隐藏泰语拼音';
-                document.getElementById('full-visual-toggle').innerText = '👁 隐藏图标';
-                document.getElementById('full-pinyin-toggle').innerText = '👁 隐藏泰语拼音';
-                document.getElementById('big-visual-toggle').innerText = '👁 隐藏图标';
-                document.getElementById('big-pinyin-toggle').innerText = '👁 隐藏泰语拼音';
-                document.getElementById('listening-visual-toggle').innerText = '👁 隐藏图标';
-            } else {
-                learningMode = 'th_to_cn';
-                document.getElementById('header-icon').innerText = '🏮';
-                document.getElementById('header-title').innerText = 'HSK Unified Master (ไทย ➔ จีน)';
-                document.getElementById('header-desc').innerText = 'ระบบ 30 บทสมบูรณ์ (1,350+ คำศัพท์ & พินอินเทียบเสียงภาษาไทย)';
-                document.getElementById('mode-switch-btn').innerHTML = '🔄 สลับโหมด: คนจีนเรียนไทย (🇨🇳 ➔ 🇹🇭)';
-                document.getElementById('mode-switch-btn').className = 'px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold rounded-xl shadow transition border border-indigo-400/40 flex items-center gap-1.5';
-                
-                document.getElementById('progress-label').innerText = 'ความคืบหน้าการจำ';
-                document.getElementById('nav-quiz').innerText = '🎯 โหมดสุ่ม 10 คำ';
-                document.getElementById('nav-fullquiz').innerText = '📝 ทดสอบครบทุกคำ';
-                document.getElementById('nav-bigquiz').innerText = '🏆 ทดสอบ 10 บทใหญ่';
-                document.getElementById('nav-listening').innerText = '🎧 โหมดฟังเสียง';
-                document.getElementById('nav-matching').innerText = '⚡ จับคู่ไว 5x2';
-                document.getElementById('nav-stats').innerText = '📊 กราฟสถิติ';
-                document.getElementById('nav-flashcard').innerText = '🃏 คลังศัพท์ & 3D';
-
-                document.getElementById('quiz-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
-                document.getElementById('quiz-pinyin-toggle').innerText = '👁 ซ่อนพินอิน';
-                document.getElementById('full-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
-                document.getElementById('full-pinyin-toggle').innerText = '👁 ซ่อนพินอิน';
-                document.getElementById('big-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
-                document.getElementById('big-pinyin-toggle').innerText = '👁 ซ่อนพินอิน';
-                document.getElementById('listening-visual-toggle').innerText = '👁 ซ่อนรูปภาพ';
-            }
+            learningMode = learningMode === 'th_to_cn' ? 'cn_to_th' : 'th_to_cn';
+            syncUILanguage();
             initChapterSelects();
             restartQuiz();
             restartFullQuiz();
@@ -925,40 +1050,87 @@
 
         function playSoundEffect(type) {
             try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
+                unlockMobileAudio();
+                if (!sharedAudioCtx) return;
+                const osc = sharedAudioCtx.createOscillator();
+                const gain = sharedAudioCtx.createGain();
                 osc.connect(gain);
-                gain.connect(audioCtx.destination);
+                gain.connect(sharedAudioCtx.destination);
                 if (type === 'correct') {
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.frequency.setValueAtTime(587.33, sharedAudioCtx.currentTime);
+                    osc.frequency.setValueAtTime(880, sharedAudioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.15, sharedAudioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, sharedAudioCtx.currentTime + 0.3);
                     osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
+                    osc.stop(sharedAudioCtx.currentTime + 0.3);
                 } else {
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(180, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(110, audioCtx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                    osc.frequency.setValueAtTime(180, sharedAudioCtx.currentTime);
+                    osc.frequency.setValueAtTime(110, sharedAudioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, sharedAudioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, sharedAudioCtx.currentTime + 0.35);
                     osc.start();
-                    osc.stop(audioCtx.currentTime + 0.35);
+                    osc.stop(sharedAudioCtx.currentTime + 0.35);
                 }
-            } catch(e) {}
+            } catch (e) {}
+        }
+
+        function pickVoiceForLang(langCode) {
+            if (!cachedVoices || cachedVoices.length === 0) {
+                loadSpeechVoices();
+            }
+            if (!cachedVoices || cachedVoices.length === 0) return null;
+
+            const prefix = langCode.toLowerCase().slice(0, 2);
+            return (
+                cachedVoices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase()) ||
+                cachedVoices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix)) ||
+                null
+            );
         }
 
         function playAudio(text, rate = 1.0) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = learningMode === 'th_to_cn' ? 'zh-CN' : 'th-TH';
-                utterance.rate = rate;
-                window.speechSynthesis.speak(utterance);
+            unlockMobileAudio();
+            if (!text) return;
+
+            if (!('speechSynthesis' in window)) {
+                alert(learningMode === 'th_to_cn' ? 'เบราว์เซอร์นี้ไม่รองรับระบบอ่านออกเสียง' : '此浏览器不支持语音朗读');
+                return;
+            }
+
+            try {
+                const targetLang = learningMode === 'th_to_cn' ? 'zh-CN' : 'th-TH';
+                const matchedVoice = pickVoiceForLang(targetLang);
+
+                if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                    window.speechSynthesis.cancel();
+                }
+
+                const speakNow = () => {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = targetLang;
+                    utterance.rate = rate;
+                    utterance.volume = 1.0;
+                    if (matchedVoice) {
+                        utterance.voice = matchedVoice;
+                    }
+                    utterance.onerror = () => {
+                        playSoundEffect('incorrect');
+                    };
+                    window.speechSynthesis.speak(utterance);
+                };
+
+                if (isMobileViewActive) {
+                    setTimeout(speakNow, 60);
+                } else {
+                    speakNow();
+                }
+            } catch (e) {
+                playSoundEffect('incorrect');
             }
         }
+
         function playCurrentAudio() { if (currentQuizWord) playAudio(learningMode === 'th_to_cn' ? currentQuizWord.hanzi : currentQuizWord.meaning); }
         function playCurrentFullAudio() { if (currentFullWord) playAudio(learningMode === 'th_to_cn' ? currentFullWord.hanzi : currentFullWord.meaning); }
         function playCurrentBigAudio() { if (currentBigWord) playAudio(learningMode === 'th_to_cn' ? currentBigWord.hanzi : currentBigWord.meaning); }
@@ -996,7 +1168,6 @@
             document.getElementById('listening-visual').classList.toggle('opacity-20', isListeningVisualHidden);
         }
 
-        // --- Standard Quiz Mode ---
         function restartQuiz() {
             quizScore = 0;
             document.getElementById('quiz-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${quizScore}`;
@@ -1007,10 +1178,10 @@
             currentQuizPool = chVal === 'all' ? allWords : allWords.filter(w => w.chapterId == chVal);
             quizDeck = shuffleArray(currentQuizPool).slice(0, 10);
             quizTotalInRound = quizDeck.length;
-            nextQuizQuestion();
+            nextQuizQuestion(false);
         }
 
-        function nextQuizQuestion() {
+        function nextQuizQuestion(shouldAutoPlay = true) {
             if (quizDeck.length === 0) {
                 document.getElementById('quiz-box').classList.add('hidden');
                 document.getElementById('quiz-gameover').classList.remove('hidden');
@@ -1022,7 +1193,9 @@
             document.getElementById('quiz-counter').innerText = learningMode === 'th_to_cn' ? `ข้อที่ ${currentIndex} / ${quizTotalInRound}` : `第 ${currentIndex} / ${quizTotalInRound} 题`;
 
             currentQuizWord = quizDeck.shift();
-            playAudio(learningMode === 'th_to_cn' ? currentQuizWord.hanzi : currentQuizWord.meaning);
+            if (shouldAutoPlay && !isMobileViewActive) {
+                playAudio(learningMode === 'th_to_cn' ? currentQuizWord.hanzi : currentQuizWord.meaning);
+            }
 
             const badge = document.getElementById('wrong-badge');
             if (wordStats[currentQuizWord.hanzi] && wordStats[currentQuizWord.hanzi].wrong > 0) badge.classList.remove('hidden');
@@ -1076,7 +1249,7 @@
                 quizScore += 10;
                 recordWordStat(currentQuizWord.hanzi, true);
                 document.getElementById('quiz-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${quizScore}`;
-                setTimeout(nextQuizQuestion, 900);
+                setTimeout(() => nextQuizQuestion(true), 900);
             } else {
                 playSoundEffect('incorrect');
                 btn.className = "p-3 bg-rose-600 text-white rounded-xl text-sm font-bold border border-rose-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
@@ -1084,11 +1257,10 @@
                     if (b.innerText === correctAns) b.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
                 });
                 recordWordStat(currentQuizWord.hanzi, false);
-                setTimeout(nextQuizQuestion, 1400);
+                setTimeout(() => nextQuizQuestion(true), 1400);
             }
         }
 
-        // --- Full Chapter Quiz Mode ---
         function restartFullQuiz() {
             fullScore = 0;
             document.getElementById('full-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${fullScore}`;
@@ -1102,10 +1274,10 @@
             fullChapterWords = chapter.words;
             fullDeck = shuffleArray(fullChapterWords);
             fullTotalInRound = fullDeck.length;
-            nextFullQuestion();
+            nextFullQuestion(false);
         }
 
-        function nextFullQuestion() {
+        function nextFullQuestion(shouldAutoPlay = true) {
             if (fullDeck.length === 0) {
                 document.getElementById('full-box').classList.add('hidden');
                 document.getElementById('full-gameover').classList.remove('hidden');
@@ -1117,7 +1289,9 @@
             document.getElementById('full-counter').innerText = learningMode === 'th_to_cn' ? `ข้อที่ ${currentIndex} / ${fullTotalInRound}` : `第 ${currentIndex} / ${fullTotalInRound} 题`;
 
             currentFullWord = fullDeck.shift();
-            playAudio(learningMode === 'th_to_cn' ? currentFullWord.hanzi : currentFullWord.meaning);
+            if (shouldAutoPlay && !isMobileViewActive) {
+                playAudio(learningMode === 'th_to_cn' ? currentFullWord.hanzi : currentFullWord.meaning);
+            }
 
             document.getElementById('full-visual').innerText = currentFullWord.icon || '📚';
             if (learningMode === 'th_to_cn') {
@@ -1159,20 +1333,19 @@
                         fullScore += 10;
                         recordWordStat(currentFullWord.hanzi, true);
                         document.getElementById('full-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${fullScore}`;
-                        setTimeout(nextFullQuestion, 900);
+                        setTimeout(() => nextFullQuestion(true), 900);
                     } else {
                         playSoundEffect('incorrect');
                         btn.className = "p-3 bg-rose-600 text-white rounded-xl text-sm font-bold border border-rose-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
                         buttons.forEach(b => { if (b.innerText === correctAns) b.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg'); });
                         recordWordStat(currentFullWord.hanzi, false);
-                        setTimeout(nextFullQuestion, 1400);
+                        setTimeout(() => nextFullQuestion(true), 1400);
                     }
                 };
                 optContainer.appendChild(btn);
             });
         }
 
-        // --- Big Chapter Quiz Mode ---
         function restartBigQuiz() {
             bigScore = 0;
             document.getElementById('big-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${bigScore}`;
@@ -1186,10 +1359,10 @@
             bigChapterWords = bigCh.words;
             bigDeck = shuffleArray(bigChapterWords);
             bigTotalInRound = bigDeck.length;
-            nextBigQuestion();
+            nextBigQuestion(false);
         }
 
-        function nextBigQuestion() {
+        function nextBigQuestion(shouldAutoPlay = true) {
             if (bigDeck.length === 0) {
                 document.getElementById('big-box').classList.add('hidden');
                 document.getElementById('big-gameover').classList.remove('hidden');
@@ -1201,7 +1374,9 @@
             document.getElementById('big-counter').innerText = learningMode === 'th_to_cn' ? `ข้อที่ ${currentIndex} / ${bigTotalInRound}` : `第 ${currentIndex} / ${bigTotalInRound} 题`;
 
             currentBigWord = bigDeck.shift();
-            playAudio(learningMode === 'th_to_cn' ? currentBigWord.hanzi : currentBigWord.meaning);
+            if (shouldAutoPlay && !isMobileViewActive) {
+                playAudio(learningMode === 'th_to_cn' ? currentBigWord.hanzi : currentBigWord.meaning);
+            }
 
             document.getElementById('big-visual').innerText = currentBigWord.icon || '📚';
             if (learningMode === 'th_to_cn') {
@@ -1243,20 +1418,19 @@
                         bigScore += 10;
                         recordWordStat(currentBigWord.hanzi, true);
                         document.getElementById('big-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนน' : '得分'}: ${bigScore}`;
-                        setTimeout(nextBigQuestion, 900);
+                        setTimeout(() => nextBigQuestion(true), 900);
                     } else {
                         playSoundEffect('incorrect');
                         btn.className = "p-3 bg-rose-600 text-white rounded-xl text-sm font-bold border border-rose-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg');
                         buttons.forEach(b => { if (b.innerText === correctAns) b.className = "p-3 bg-emerald-600 text-white rounded-xl text-sm font-bold border border-emerald-500 shadow " + (learningMode === 'th_to_cn' ? '' : 'chinese-font text-lg'); });
                         recordWordStat(currentBigWord.hanzi, false);
-                        setTimeout(nextBigQuestion, 1400);
+                        setTimeout(() => nextBigQuestion(true), 1400);
                     }
                 };
                 optContainer.appendChild(btn);
             });
         }
 
-        // --- Listening Mode ---
         function restartListening() {
             listeningScore = 0;
             document.getElementById('listening-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนนฟังเสียง' : '听力得分'}: ${listeningScore}`;
@@ -1267,10 +1441,10 @@
             listeningPool = chVal === 'all' ? allWords : allWords.filter(w => w.chapterId == chVal);
             listeningDeck = shuffleArray(listeningPool).slice(0, 10);
             listeningTotalInRound = listeningDeck.length;
-            nextListeningQuestion();
+            nextListeningQuestion(false);
         }
 
-        function nextListeningQuestion() {
+        function nextListeningQuestion(shouldAutoPlay = true) {
             if (listeningDeck.length === 0) {
                 document.getElementById('listening-box').classList.add('hidden');
                 document.getElementById('listening-gameover').classList.remove('hidden');
@@ -1283,7 +1457,9 @@
 
             currentListeningWord = listeningDeck.shift();
             document.getElementById('listening-visual').innerText = currentListeningWord.icon || '🎧';
-            playListeningAudio(1.0);
+            if (shouldAutoPlay && !isMobileViewActive) {
+                playListeningAudio(1.0);
+            }
 
             let options = [currentListeningWord];
             let availablePool = shuffleArray(listeningPool.filter(w => w.hanzi !== currentListeningWord.hanzi));
@@ -1319,13 +1495,13 @@
                         listeningScore += 10;
                         recordWordStat(currentListeningWord.hanzi, true);
                         document.getElementById('listening-score').innerText = `${learningMode === 'th_to_cn' ? 'คะแนนฟังเสียง' : '听力得分'}: ${listeningScore}`;
-                        setTimeout(nextListeningQuestion, 900);
+                        setTimeout(() => nextListeningQuestion(true), 900);
                     } else {
                         playSoundEffect('incorrect');
                         btn.className = "p-4 bg-rose-600 text-white rounded-xl text-center border border-rose-500 shadow flex flex-col items-center justify-center";
                         buttons.forEach(b => { if(b.innerText.includes(learningMode === 'th_to_cn' ? currentListeningWord.hanzi : currentListeningWord.meaning)) b.className = "p-4 bg-emerald-600 text-white rounded-xl text-center border border-emerald-500 shadow flex flex-col items-center justify-center"; });
                         recordWordStat(currentListeningWord.hanzi, false);
-                        setTimeout(nextListeningQuestion, 1400);
+                        setTimeout(() => nextListeningQuestion(true), 1400);
                     }
                 };
                 optContainer.appendChild(btn);
@@ -1333,7 +1509,6 @@
         }
         function playListeningAudio(rate) { if(currentListeningWord) playAudio(learningMode === 'th_to_cn' ? currentListeningWord.hanzi : currentListeningWord.meaning, rate); }
 
-        // --- Speed Matching Game ---
         function startMatchingGame() {
             clearInterval(matchingTimerInterval);
             matchingStartTime = Date.now();
@@ -1410,7 +1585,6 @@
             });
         }
 
-        // --- Stats & Charts ---
         function renderStatsChart() {
             const chId = document.getElementById('stats-chapter-select').value;
             const chapter = chaptersData.find(c => c.id == chId);
@@ -1432,7 +1606,7 @@
                 const itemDiv = document.createElement('div');
                 itemDiv.className = "bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-2";
                 itemDiv.innerHTML = `
-                    <div class="flex justify-between items-center text-sm">
+                    <div class="flex justify-between items-center text-sm flex-wrap gap-1">
                         <div class="flex items-center gap-2">
                             <span class="text-xl">${w.icon || '📚'}</span>
                             <span class="${learningMode==='th_to_cn'?'chinese-font text-lg text-amber-400':'text-lg text-amber-400 font-bold'}">${learningMode==='th_to_cn'?w.hanzi:w.meaning}</span>
@@ -1455,7 +1629,6 @@
             document.getElementById('stat-total-wrong').innerText = `${totalWrong} ${learningMode === 'th_to_cn' ? 'ครั้ง' : '次'}`;
         }
 
-        // --- Flashcard & Dictionary ---
         function setupFlashcard() { flashcardIndex = 0; isFlashcardFlipped = false; renderCurrentFlashcard(); }
         function getCurrentFlashcardText() {
             const w = allWords[flashcardIndex];
@@ -1546,6 +1719,7 @@
                 let subCol = learningMode === 'th_to_cn' ? w.pinyin : getThaiPinyinForChinese(w.meaning);
                 let descCol = learningMode === 'th_to_cn' ? w.meaning : w.hanzi;
                 let mainFontClass = learningMode === 'th_to_cn' ? 'chinese-font text-xl text-amber-400' : 'text-lg text-amber-400 font-bold';
+                const audioBtnTitle = learningMode === 'th_to_cn' ? 'ฟังเสียง' : '听发音';
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-700/40 transition";
@@ -1556,7 +1730,7 @@
                     <td class="p-3 text-xs text-slate-400">${learningMode === 'th_to_cn' ? w.chapterName : w.cnChapterName}</td>
                     <td class="p-3 text-center"><span class="text-xs text-slate-300">${learningMode==='th_to_cn'?'เจอ':'见'} <b class="text-amber-300">${stat.seen}</b> | <span class="text-emerald-400">${learningMode==='th_to_cn'?'ถูก':'对'} ${stat.correct}</span> | <span class="text-rose-400">${learningMode==='th_to_cn'?'ผิด':'错'} ${stat.wrong}</span></span></td>
                     <td class="p-3 text-center"><button onclick="toggleDictMemory('${w.hanzi}')" class="px-2.5 py-1 rounded text-xs font-semibold ${isMem ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/50' : 'bg-slate-700 text-slate-400'}">${isMem ? (learningMode === 'th_to_cn' ? '✓ จำแล้ว' : '✓ 已记') : (learningMode === 'th_to_cn' ? 'ยังไม่จำ' : '未记')}</button></td>
-                    <td class="p-3 text-center"><button onclick="playAudio('${learningMode==='th_to_cn'?w.hanzi:w.meaning}')" class="p-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs" title="ฟังเสียง">🔊</button></td>
+                    <td class="p-3 text-center"><button onclick="playAudio('${learningMode==='th_to_cn'?w.hanzi:w.meaning}')" class="p-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs" title="${audioBtnTitle}">🔊</button></td>
                 `;
                 tbody.appendChild(tr);
             });
